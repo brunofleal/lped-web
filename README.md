@@ -7,3 +7,5 @@ React + Node(Express) + MongoDB application for dota 2 amateur league(BR). Displ
 - Passport
 - Steam for Node.js
 - node-dota2
+
+## Frontend Project based on: https://github.com/ShubhamSj07/react-typescript-boilerplate
