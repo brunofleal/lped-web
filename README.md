@@ -3,9 +3,8 @@ React + Node(Express) + MongoDB application for dota 2 amateur league(BR). Displ
 
 ## Relevant libraries
 - Chakra
+- React Router Dom
 - Express
 - Passport
 - Steam for Node.js
 - node-dota2
-
-## Frontend Project based on: https://github.com/ShubhamSj07/react-typescript-boilerplate

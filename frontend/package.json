@@ -1,8 +1,9 @@
 {
-    "name": "react-typescript-boilerplate",
+    "name": "lped-web",
     "version": "0.1.0",
     "private": true,
-     "dependencies": {
+    "dependencies": {
+        "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
         "@chakra-ui/core": "0.8.0",
         "@chakra-ui/icons": "2.0.17",
         "@chakra-ui/react": "2.5.5",
@@ -18,7 +19,6 @@
         "@types/node": "^16.18.11",
         "@types/react": "18",
         "@types/react-dom": "18",
-        "axios": "^1.2.3",
         "dotenv": "^16.0.3",
         "emotion-theming": "11.0.0",
         "eslint-plugin-simple-import-sort": "^9.0.0",
@@ -29,7 +29,7 @@
         "react-dom": "18",
         "react-icons": "^4.10.1",
         "react-intl": "^6.2.6",
-        "react-router-dom": "^6.7.0",
+        "react-router-dom": "^6.16.0",
         "react-scripts": "5.0.1",
         "react-select": "^5.7.2",
         "sort-by": "^1.2.0",
@@ -76,7 +76,7 @@
         "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-import": "^2.25.4",
         "eslint-plugin-jsx-a11y": "^6.5.1",
-        "eslint-plugin-react": "^7.28.0",
+        "eslint-plugin-react": "^7.33.2",
         "eslint-plugin-react-hooks": "^4.3.0",
         "eslint-plugin-security": "^1.4.0",
         "husky": "^7.0.4",

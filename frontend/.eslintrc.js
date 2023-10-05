@@ -12,6 +12,19 @@ module.exports = {
         ecmaVersion: 13,
         sourceType: "module",
     },
-    plugins: ["react", "@typescript-eslint"],
-    rules: {},
+    plugins: ["react", "@typescript-eslint", "simple-import-sort"],
+    rules: {
+        "linebreak-style": 0,
+        "eqeqeq": "error",
+        "no-console": "warn",
+        "simple-import-sort/imports": "error",
+        "no-unused-vars": [
+            "error",
+            {
+                "varsIgnorePattern": "React"
+            }
+        ],
+        "indent": ["error", 4],
+        "max-len": ["warn", { "code": 120 }]
+    }
 };
