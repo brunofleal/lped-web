@@ -25,6 +25,7 @@ module.exports = {
             }
         ],
         "indent": ["error", 4],
-        "max-len": ["warn", { "code": 120 }]
+        "max-len": ["warn", { "code": 120 }],
+        "object-curly-spacing": ["error", "always"]
     }
 };
