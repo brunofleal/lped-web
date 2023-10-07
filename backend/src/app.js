@@ -17,6 +17,7 @@ const app = express();
 if (config.env !== 'test') {
     app.use(morgan.successHandler);
     app.use(morgan.errorHandler);
+    console.log(listEndpoints(app));
 }
 
 // set security HTTP headers
@@ -41,12 +42,16 @@ app.options('*', cors());
 
 app.use('/api', router);
 
-console.log(listEndpoints(app));
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {
     next(new ApiError(httpStatus.NOT_FOUND, 'Not found' + req.baseUrl));
 });
+
+if (config.env !== 'test') {
+    console.log('Available routes:');
+    console.log(listEndpoints(app));
+}
 
 // convert error to ApiError, if needed
 app.use(errorConverter);

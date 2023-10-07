@@ -17,15 +17,26 @@ const PageWrapper: FC = () => {
         <VStack bgGradient='linear(to-r, blue.200, blue.800)'>
             <Breadcrumb separator='-'>
                 <BreadcrumbItem>
-                    <BreadcrumbLink {...linkProps(routes.HomePage.path)}>Liga</BreadcrumbLink>
+                    <BreadcrumbLink {...linkProps(routes.HomePage.path)}>
+                        Liga
+                    </BreadcrumbLink>
                 </BreadcrumbItem>
 
                 <BreadcrumbItem>
-                    <BreadcrumbLink {...linkProps(routes.PlayersPage.path)} href={routes.PlayersPage.path}>Jogadores</BreadcrumbLink>
+                    <BreadcrumbLink {...linkProps(routes.PlayersPage.path)} href={routes.PlayersPage.path}>
+                        Jogadores
+                    </BreadcrumbLink>
                 </BreadcrumbItem>
 
                 <BreadcrumbItem>
-                    <BreadcrumbLink {...linkProps(routes.TeamsPage.path)} href={routes.TeamsPage.path}>Times</BreadcrumbLink>
+                    <BreadcrumbLink {...linkProps(routes.TeamsPage.path)} href={routes.TeamsPage.path}>
+                        Times
+                    </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbItem>
+                    <BreadcrumbLink {...linkProps(routes.ManagementPage.path)} href={routes.ManagementPage.path}>
+                        Gerenciamento
+                    </BreadcrumbLink>
                 </BreadcrumbItem>
             </Breadcrumb></VStack>
         <Box bgColor={'white'} w={'100%'} p={2}>
