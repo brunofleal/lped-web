@@ -1,15 +1,20 @@
 const httpStatus = require('http-status');
 const { Player } = require('../models');
 const ApiError = require('../utils/ApiError');
+const { getPlayerInfo } = require('./stratz.service');
 
 const createPlayer = async (playerBody) => {
-    let newPlayer = Player.create(playerBody);
-    newPlayer = addDotaDataToPlayer(newPlayer);
+    const playerWithStratzData = await addStratzDataToPlayer(playerBody);
+    console.log({ playerWithStratzData });
+    let newPlayer = Player.create(playerWithStratzData);
     return newPlayer;
 };
 
-const addDotaDataToPlayer = async (playerBody) => {
-    return playerBody;
+const addStratzDataToPlayer = async (playerBody) => {
+    const playerData = {
+        ...playerBody, stratzApi: { ...await getPlayerInfo(playerBody.dotaId) }
+    };
+    return playerData;
 };
 
 const queryPlayers = async (filter, options) => {
@@ -21,17 +26,17 @@ const getPlayerById = async (id) => {
     return Player.findById(id);
 };
 
-const getPlayerBySteamid = async (steamid) => {
-    return Player.findOne({ steamid });
+const getPlayerByDotaId = async (dotaId) => {
+    return Player.findOne({ dotaId });
 };
 
-const updatePlayerBySteamid = async (steamid, updateBody) => {
-    const Player = await getPlayerBySteamid(steamid);
+const updatePlayerByDotaId = async (dotaId, updateBody) => {
+    const Player = await getPlayerByDotaId(dotaId);
     if (!Player) {
         throw new ApiError(httpStatus.NOT_FOUND, 'Player not found');
     }
-    if (updateBody.steamid && (await Player.isSteamidTaken(updateBody.steamid, steamid))) {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Player with steamid already exists');
+    if (updateBody.dotaId && (await Player.isDotaIdTaken(updateBody.dotaId, dotaId))) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Player with dotaId already exists');
     }
     Object.assign(Player, updateBody);
     await Player.save();
@@ -61,8 +66,8 @@ module.exports = {
     createPlayer,
     queryPlayers,
     getPlayerById,
-    getPlayerBySteamid,
+    getPlayerByDotaId,
     updatePlayerById,
-    updatePlayerBySteamid,
+    updatePlayerByDotaId,
     deletePlayerById,
 };

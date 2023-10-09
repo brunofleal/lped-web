@@ -19,6 +19,7 @@
         "@types/node": "^16.18.11",
         "@types/react": "18",
         "@types/react-dom": "18",
+        "axios": "^1.5.1",
         "dotenv": "^16.0.3",
         "emotion-theming": "11.0.0",
         "eslint-plugin-simple-import-sort": "^9.0.0",

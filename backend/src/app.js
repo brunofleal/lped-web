@@ -11,6 +11,7 @@ const router = require('./router');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
 const listEndpoints = require("express-list-endpoints");
+const bodyParser = require("body-parser");
 
 const app = express();
 
@@ -35,6 +36,10 @@ app.use(mongoSanitize());
 
 // gzip compression
 app.use(compression());
+
+
+// use body parser
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // enable cors
 app.use(cors());

@@ -12,7 +12,7 @@ router
     .get(playerController.getPlayers);
 
 router
-    .route('/:steamid')
+    .route('/:dotaId')
     .get(playerController.getPlayer)
     .patch(playerController.updatePlayer)
     .delete(playerController.deletePlayer);

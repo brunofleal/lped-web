@@ -1,15 +1,16 @@
 const mongoose = require('mongoose');
 const { toJSON, paginate } = require('./plugins');
 
-const playerClass = ['player', 'captain', 'standing'];
+const playerClass = ['player', 'captain'];
 
 const playerSchema = mongoose.Schema(
     {
-        steamid: {
+        dotaId: {
+            type: Number,
             unique: true,
-            type: String,
             required: true,
-            trim: true,
+        },
+        stratzApi: {
         },
         playerClass: {
             type: playerClass,
@@ -27,10 +28,6 @@ const playerSchema = mongoose.Schema(
     }
 );
 
-playerSchema.statics.isSteamidTaken = async function (steamid, excludeSteamid) {
-    const user = await this.findOne({ steamid, _id: { $ne: excludeSteamid } });
-    return !!user;
-};
 
 playerSchema.plugin(toJSON);
 playerSchema.plugin(paginate);
