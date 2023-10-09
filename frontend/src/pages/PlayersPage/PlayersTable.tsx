@@ -17,7 +17,6 @@ const PlayersTable = () => {
     useEffect(() => {
         axiosApi.request(getConfig).then((response) => {
             if (response.status === 200) {
-                console.log(response);
                 setPlayers(response.data.results);
             }
         }).catch(() => {
@@ -33,8 +32,8 @@ const PlayersTable = () => {
                 </Tr>
             </Thead>
             <Tbody>
-                {players?.map((player) => {
-                    return <PlayerRow key={'k' + player.dotaId} {...player} />;
+                {players?.map((player, index) => {
+                    return <PlayerRow key={'k' + index} {...player} />;
                 })}
             </Tbody>
         </Table>
@@ -43,9 +42,20 @@ const PlayersTable = () => {
 
 
 const PlayerRow = (player: PlayerModel) => {
+    console.log({ player });
+    const getValidName = () => {
+        if (player?.stratzApi?.identity?.name) {
+            return player?.stratzApi?.identity?.name;
+        }
+        if (player?.stratzApi?.names && player?.stratzApi?.names[0]?.name) {
+            return player?.stratzApi?.names[0]?.name;
+        } if (player?.stratzApi?.steamAccount?.name) {
+            return player?.stratzApi?.steamAccount?.name;
+        }
+    };
     return <Tr>
-        <Td>{player.stratzApi.identity.name}</Td>
-        <Td>{String(player.dotaId)}</Td>
+        <Td>{getValidName()}</Td>
+        <Td>{String(player?.dotaId)}</Td>
     </Tr>;
 };
 
