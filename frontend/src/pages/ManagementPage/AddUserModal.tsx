@@ -29,14 +29,8 @@ const AddUserModal = () => {
     };
 
     return <Box>
-        <Text bgGradient='linear(to-l, #7928CA, #FF0080)'
-            bgClip='text'
-            fontSize='3xl'
-            fontWeight='extrabold'>
-            Gerenciamento
-        </Text>
         <HStack justify={'flex-start'}>
-            <Text>Novo Usuário</Text>
+            <Text>Novo Jogador</Text>
             <Input
                 width={'auto'}
                 placeholder='ID do dota, ex:84046837'
@@ -44,11 +38,10 @@ const AddUserModal = () => {
                 value={dotaId}
             />
             <Button variant={'solid'} onClick={handleCreateUser}
-                disabled={Number.isInteger(dotaId) && !Number.isNaN(dotaId)}>
+                isDisabled={!dotaId.length || Number.isNaN(dotaId)}>
                 Adicionar
             </Button>
         </HStack>
-        <input></input>
     </Box>;
 };
 

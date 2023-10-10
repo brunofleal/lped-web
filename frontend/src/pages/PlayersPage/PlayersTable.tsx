@@ -1,31 +1,15 @@
-import { Table, TableContainer, Tbody, Td, Th, Thead, Tr, useToast } from '@chakra-ui/react';
-import { AxiosRequestConfig } from 'axios';
-import React, { useEffect, useState } from 'react';
+import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import React from 'react';
 
-import endpoints from '../../constants/endpoints';
 import { PlayerModel } from '../../models/PlayerModel';
-import axiosApi from '../../shared/axiosApi';
 
-const PlayersTable = () => {
-    const toast = useToast();
-    const [players, setPlayers] = useState<PlayerModel[]>([]);
-    const getConfig: AxiosRequestConfig = {
-        url: endpoints.player.add.path,
-        method: endpoints.player.list.method,
-    };
-
-    useEffect(() => {
-        axiosApi.request(getConfig).then((response) => {
-            if (response.status === 200) {
-                setPlayers(response.data.results);
-            }
-        }).catch(() => {
-            toast({ status: 'error', title: 'Erro na listagem de jogadores', position: 'top' });
-        });
-    }, []);
-    return <TableContainer>
-        <Table variant='simple' w={'auto'}>
-            <Thead>
+interface PlayerTableProps {
+    players: PlayerModel[];
+}
+const PlayersTable = ({ players }: PlayerTableProps) => {
+    return <TableContainer w={'inherit'} h={'inherit'} overflowY="scroll">
+        <Table variant='striped' colorScheme='blue'>
+            <Thead position={'sticky'}>
                 <Tr>
                     <Th>Nome</Th>
                     <Th>Dota Id</Th>
@@ -42,7 +26,6 @@ const PlayersTable = () => {
 
 
 const PlayerRow = (player: PlayerModel) => {
-    console.log({ player });
     const getValidName = () => {
         if (player?.stratzApi?.identity?.name) {
             return player?.stratzApi?.identity?.name;

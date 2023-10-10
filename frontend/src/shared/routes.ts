@@ -3,10 +3,10 @@ const routes = {
         path: '/',
     },
     PlayersPage: {
-        path: '/teams',
+        path: '/players',
     },
     TeamsPage: {
-        path: '/players',
+        path: '/teams',
     },
     ManagementPage: {
         path: '/management',
