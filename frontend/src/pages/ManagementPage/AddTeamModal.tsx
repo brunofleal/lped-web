@@ -13,7 +13,7 @@ const AddTeamModal = () => {
 
     const postConfig: AxiosRequestConfig = {
         url: endpoints.team.add.path,
-        data: { dotaId: teamName },
+        data: { captainDotaId, name: teamName },
         method: endpoints.player.add.method,
     };
     const handleCreateUser = () => {
@@ -34,19 +34,21 @@ const AddTeamModal = () => {
         <HStack justify={'flex-start'}>
             <Text>Novo Time</Text>
             <Input
+                type='text'
                 width={'auto'}
                 placeholder='Nome do time'
-                onChange={(event) => setCaptainDotaId(event.currentTarget.value)}
-                value={captainDotaId}
-            />
-            <Input
-                width={'auto'}
-                placeholder='Id do capitão do time'
                 onChange={(event) => setTeamName(event.currentTarget.value)}
                 value={teamName}
             />
+            <Input
+                type='number'
+                width={'auto'}
+                placeholder='Id do capitão do time'
+                onChange={(event) => setCaptainDotaId(event.currentTarget.value)}
+                value={captainDotaId}
+            />
             <Button variant={'solid'} onClick={handleCreateUser}
-                isDisabled={!teamName.length || !captainDotaId.length}>
+                isDisabled={!teamName.length || !captainDotaId.length || Number.isNaN(captainDotaId)}>
                 Adicionar
             </Button>
         </HStack>

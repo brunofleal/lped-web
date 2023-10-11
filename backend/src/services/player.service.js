@@ -44,13 +44,13 @@ const updatePlayerByDotaId = async (dotaId, updateBody) => {
 };
 
 const updatePlayerById = async (playerid, updateBody) => {
-    const user = await getUserById(playerid);
-    if (!user) {
+    const player = await getPlayerById(playerid);
+    if (!player) {
         throw new ApiError(httpStatus.NOT_FOUND, 'Player not found');
     }
-    Object.assign(user, updateBody);
-    await user.save();
-    return user;
+    Object.assign(player, updateBody);
+    await player.save();
+    return player;
 };
 
 const deletePlayerById = async (PlayerId) => {

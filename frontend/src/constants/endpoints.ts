@@ -16,7 +16,8 @@ const endpoints = {
         add: {
             path: '/api/team',
             reqBodyParams: {
-                teamName: 'teamName',
+                name: 'name',
+                captainId: 'captainId',
             },
             method: 'POST',
         },

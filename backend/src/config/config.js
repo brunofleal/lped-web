@@ -7,9 +7,10 @@ dotenv.config({ path: path.join(__dirname, '../../.env') });
 const envVarsSchema = Joi.object()
     .keys({
         NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
-        PORT: Joi.number().default(3000),
+        PORT: Joi.number().default(8000),
         MONGODB_URL: Joi.string().required().description('Mongo DB url'),
-        STRATZ_API_TOKEN: Joi.string().required().description('Stratz api token')
+        STRATZ_API_TOKEN: Joi.string().required().description('Stratz api token'),
+        ADMIN_AUTH_TOKEN: Joi.string().required().description('Stratz api token')
     })
     .unknown();
 
@@ -37,5 +38,8 @@ module.exports = {
     },
     stratz: {
         token: envVars.STRATZ_API_TOKEN
+    },
+    auth: {
+        token: envVars.ADMIN_AUTH_TOKEN
     }
 };

@@ -1,12 +1,14 @@
 import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import React from 'react';
+import { BsStar } from 'react-icons/bs';
 
 import { PlayerModel } from '../../models/PlayerModel';
 
 interface PlayerTableProps {
     players: PlayerModel[];
+    captainId?: Number;
 }
-const PlayersTable = ({ players }: PlayerTableProps) => {
+const PlayersTable = ({ players, captainId }: PlayerTableProps) => {
     return <TableContainer w={'inherit'} h={'inherit'} overflowY="scroll">
         <Table variant='striped' colorScheme='blue'>
             <Thead position={'sticky'}>
@@ -17,7 +19,7 @@ const PlayersTable = ({ players }: PlayerTableProps) => {
             </Thead>
             <Tbody>
                 {players?.map((player, index) => {
-                    return <PlayerRow key={'k' + index} {...player} />;
+                    return <PlayerRow isCaptain={player.dotaId === captainId} key={'k' + index} {...player} />;
                 })}
             </Tbody>
         </Table>
@@ -25,7 +27,7 @@ const PlayersTable = ({ players }: PlayerTableProps) => {
 };
 
 
-const PlayerRow = (player: PlayerModel) => {
+const PlayerRow = (player: PlayerModel & { isCaptain: boolean; }) => {
     const getValidName = () => {
         if (player?.stratzApi?.identity?.name) {
             return player?.stratzApi?.identity?.name;
@@ -37,7 +39,7 @@ const PlayerRow = (player: PlayerModel) => {
         }
     };
     return <Tr>
-        <Td>{getValidName()}</Td>
+        <Td>{getValidName()}{player.isCaptain ? <BsStar /> : <></>}</Td>
         <Td>{String(player?.dotaId)}</Td>
     </Tr>;
 };
