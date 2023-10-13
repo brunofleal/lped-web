@@ -11,6 +11,10 @@ const teamSchema = mongoose.Schema(
             type: Number,
             required: true,
         },
+        playerIds: {
+            type: Array,
+            required: true,
+        },
         wins: {
             type: Number,
             required: false,

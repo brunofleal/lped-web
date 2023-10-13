@@ -9,7 +9,7 @@ const createPlayer = catchAsync(async (req, res) => {
 });
 
 const getPlayers = catchAsync(async (req, res) => {
-    const filter = pick(req.query, ['name', 'role']);
+    const filter = pick(req.query, ['dotaId']);
     const options = pick(req.query, ['sortBy', 'limit', 'page']);
     const result = await playerService.queryPlayers(filter, options);
     res.send(result);

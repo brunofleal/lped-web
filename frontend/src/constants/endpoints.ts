@@ -17,9 +17,13 @@ const endpoints = {
             path: '/api/team',
             reqBodyParams: {
                 name: 'name',
-                captainId: 'captainId',
+                captainDotaId: 'captainDotaId',
             },
             method: 'POST',
+        },
+        list: {
+            path: '/api/team',
+            method: 'GET',
         },
     },
 };

@@ -30,6 +30,14 @@ const getPlayerByDotaId = async (dotaId) => {
     return Player.findOne({ dotaId });
 };
 
+const getPlayersByDotaId = async (dotaIds) => {
+    const players = [];
+    for (const dotaId in dotaIds) {
+        players.push(Player.findOne({ dotaId }));
+    }
+    return players;
+};
+
 const updatePlayerByDotaId = async (dotaId, updateBody) => {
     const Player = await getPlayerByDotaId(dotaId);
     if (!Player) {
@@ -66,6 +74,7 @@ module.exports = {
     createPlayer,
     queryPlayers,
     getPlayerById,
+    getPlayersByDotaId,
     getPlayerByDotaId,
     updatePlayerById,
     updatePlayerByDotaId,

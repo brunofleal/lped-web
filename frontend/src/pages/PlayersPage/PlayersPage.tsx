@@ -24,6 +24,7 @@ const PlayersPage = () => {
             toast({ status: 'error', title: 'Erro na listagem de jogadores', position: 'top' });
         });
     }, []);
+
     return <>
         <Text>Players Page</Text>
         <Box w={'800px'} h={'60vh'} border='solid 2px black'>
