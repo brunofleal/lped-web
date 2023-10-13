@@ -5,7 +5,8 @@ export interface StratzApi {
 }
 
 export interface PlayerModel {
-    name: String;
+    name: string;
+    teamId?: string;
     dotaId: Number;
     stratzApi: StratzApi;
 }

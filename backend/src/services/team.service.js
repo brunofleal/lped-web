@@ -16,13 +16,14 @@ const getTeamById = async (id) => {
     return Team.findById(id);
 };
 
-const updateTeamById = async (teamid, updateBody) => {
-    const team = await getTeamById(teamid);
+const updateTeamById = async (id, updateBody) => {
+    const team = await getTeamById(id);
     if (!team) {
         throw new ApiError(httpStatus.NOT_FOUND, 'Team not found');
     }
     Object.assign(team, updateBody);
     await team.save();
+    console.log('saved team', updateBody);
     return team;
 };
 

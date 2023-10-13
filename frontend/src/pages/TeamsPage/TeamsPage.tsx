@@ -1,4 +1,4 @@
-import { Box, Grid, Text } from '@chakra-ui/react';
+import { Box, Grid, GridItem, Text } from '@chakra-ui/react';
 import { AxiosRequestConfig } from 'axios';
 import React, { useEffect, useState } from 'react';
 
@@ -20,16 +20,20 @@ const TeamsPage = () => {
         });
     }, []);
 
-    return <Grid>
-        <Text>Teams Page</Text>;
-        {
-            teams.map((team, index) => {
-                return <Box key={'t' + index} w={'400px'} h={'600px'}>
-                    <TeamTable team={team} />
-                </Box>;
-            })}
-
-    </Grid>;
+    return <Box>
+        <Text>Teams Page</Text>
+        <Grid templateColumns='repeat(3, 1fr)' gap={3}>
+            {
+                teams.map((team, index) => {
+                    return <GridItem key={'t' + index}>
+                        <Box w={'400px'} h={'auto'}>
+                            <TeamTable team={team} styleIndex={index} />
+                        </Box>
+                    </GridItem>;
+                })
+            }
+        </Grid>
+    </Box>;
 };
 
 export default TeamsPage;

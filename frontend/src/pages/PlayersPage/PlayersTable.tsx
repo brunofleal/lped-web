@@ -1,9 +1,9 @@
-import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import { Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { AxiosRequestConfig } from 'axios';
 import React, { useEffect, useState } from 'react';
-import { BsStar } from 'react-icons/bs';
 
 import endpoints from '../../constants/endpoints';
+import { getValidPlayerName } from '../../hooks/playerUtils';
 import { PlayerModel } from '../../models/PlayerModel';
 import axiosApi from '../../shared/axiosApi';
 
@@ -11,9 +11,9 @@ interface PlayerTableProps {
     players?: PlayerModel[];
     playerIds?: Number[];
     captainDotaId?: Number;
+    tableColor?: string;
 }
-const PlayersTable = ({ players, playerIds, captainDotaId }: PlayerTableProps) => {
-    console.log({ playerIds, captainDotaId });
+const PlayersTable = ({ players, playerIds, captainDotaId, tableColor }: PlayerTableProps) => {
     const [playersInfo, setPlayerInfo] = useState<PlayerModel[]>([]);
 
     const playersWithDetails = playersInfo?.map((player, index) => {
@@ -28,7 +28,7 @@ const PlayersTable = ({ players, playerIds, captainDotaId }: PlayerTableProps) =
 
     useEffect(() => {
         if (playerIds) {
-            const queryParam = `?dotaId=${playerIds.join('dotaId=')}`;
+            const queryParam = `?dotaId=${playerIds.join('&dotaId=')}`;
             const listFilteredPlayersConfig: AxiosRequestConfig = {
                 url: `/api/player${queryParam}`,
                 method: endpoints.player.list.method,
@@ -42,8 +42,8 @@ const PlayersTable = ({ players, playerIds, captainDotaId }: PlayerTableProps) =
         }
     }, [playerIds]);
 
-    return <TableContainer w={'inherit'} h={'inherit'} overflowY="scroll">
-        <Table variant='striped' colorScheme='blue'>
+    return <TableContainer w={'inherit'} h={'inherit'} overflowY="auto">
+        <Table variant='striped' colorScheme={tableColor}>
             <Thead position={'sticky'}>
                 <Tr>
                     <Th>Nome</Th>
@@ -58,25 +58,16 @@ const PlayersTable = ({ players, playerIds, captainDotaId }: PlayerTableProps) =
 };
 
 interface PlayerProps {
-    playerInfo?: PlayerModel;
+    playerInfo: PlayerModel;
     isCaptain?: boolean;
 }
 const PlayerRow = ({ playerInfo, isCaptain }: PlayerProps) => {
-    const getValidName = () => {
-        if (playerInfo?.stratzApi?.identity?.name) {
-            return playerInfo?.stratzApi?.identity?.name;
-        }
-        if (playerInfo?.stratzApi?.names && playerInfo?.stratzApi?.names[0]?.name) {
-            return playerInfo?.stratzApi?.names[0]?.name;
-        } if (playerInfo?.stratzApi?.steamAccount?.name) {
-            return playerInfo?.stratzApi?.steamAccount?.name;
-        }
-        if (playerInfo?.stratzApi?.identity?.name) {
-            return playerInfo?.stratzApi?.identity?.name;
-        }
-    };
     return <Tr>
-        <Td>{getValidName()}{isCaptain ? <BsStar /> : <></>}</Td>
+        <Td>
+            <Text fontWeight={isCaptain ? 'bold' : 'normal'}>{isCaptain ? '[C]' : <></>}
+                {getValidPlayerName(playerInfo)}
+            </Text>
+        </Td>
         <Td>{String(playerInfo?.dotaId)}</Td>
     </Tr>;
 };

@@ -25,6 +25,13 @@ const endpoints = {
             path: '/api/team',
             method: 'GET',
         },
+        update: {
+            path: '/api/team/:teamid',
+            pathParam: {
+                teamid: ':teamid',
+            },
+            method: 'PATCH',
+        },
     },
 };
 

@@ -21,7 +21,8 @@ const getTeam = catchAsync(async (req, res) => {
 });
 
 const updateTeam = catchAsync(async (req, res) => {
-    const user = await teamService.updateTeamById(req.params.userId, req.body);
+    console.log('updateTeam');
+    const user = await teamService.updateTeamById(req.params.id, req.body);
     res.send(user);
 });
 
