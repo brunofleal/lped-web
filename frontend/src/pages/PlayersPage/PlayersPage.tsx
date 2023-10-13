@@ -25,12 +25,12 @@ const PlayersPage = () => {
         });
     }, []);
 
-    return <>
-        <Text>Players Page</Text>
+    return <Box mt={4}>
+        <Text>Jogadores da Liga</Text>
         <Box w={'800px'} h={'60vh'} border='solid 2px black'>
             <PlayersTable players={players} />
         </Box>
-    </>;
+    </Box>;
 };
 
 export default PlayersPage;

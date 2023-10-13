@@ -20,13 +20,20 @@ const TeamsPage = () => {
         });
     }, []);
 
-    return <Box>
-        <Text>Teams Page</Text>
-        <Grid templateColumns='repeat(3, 1fr)' gap={3}>
+    return <Box mt={4}>
+        <Text
+            bgGradient='linear(to-t, red.400, green.400, yellow.400, blue.400, pink.400)'
+            bgClip='text'
+            fontSize='6xl'
+            fontWeight='extrabold'
+        >
+            Times
+        </Text>
+        <Grid templateColumns='repeat(3, 2fr)' alignContent={'center'} gap={6}>
             {
                 teams.map((team, index) => {
                     return <GridItem key={'t' + index}>
-                        <Box w={'400px'} h={'auto'}>
+                        <Box h={'auto'}>
                             <TeamTable team={team} styleIndex={index} />
                         </Box>
                     </GridItem>;

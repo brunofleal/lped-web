@@ -5,7 +5,7 @@ import AddTeamModal from './AddTeamModal';
 import AddUserModal from './AddUserModal';
 
 const ManagementPage = () => {
-    return <Box>
+    return <Box mt={4}>
         <Text bgGradient='linear(to-l, #7928CA, #FF0080)'
             bgClip='text'
             fontSize='3xl'

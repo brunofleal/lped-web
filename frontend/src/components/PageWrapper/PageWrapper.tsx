@@ -13,8 +13,8 @@ const PageWrapper: FC = () => {
         };
     };
 
-    return <Box mb={2} h='calc(97vh)'>
-        <VStack bgGradient='linear(to-r, blue.200, blue.800)'>
+    return <Box>
+        <VStack bgGradient='linear(to-r, blue.200, blue.800)' position={'fixed'} w='100vw'>
             <Breadcrumb separator='-'>
                 <BreadcrumbItem>
                     <BreadcrumbLink {...linkProps(routes.HomePage.path)}>
@@ -39,7 +39,7 @@ const PageWrapper: FC = () => {
                     </BreadcrumbLink>
                 </BreadcrumbItem>
             </Breadcrumb></VStack>
-        <Box bgColor={'white'} w={'100%'} p={2}>
+        <Box bgColor={'white'} w={'100vw'} overflowY={'auto'} p={4}>
             <Outlet />
         </Box >
     </Box>;

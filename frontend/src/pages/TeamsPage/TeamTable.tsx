@@ -101,11 +101,11 @@ const AddPlayerModal = ({ team, onOpen, isOpen, onClose }: AddPlayerModalProps) 
     }, []);
 
     return <>
-        <Button onClick={onOpen}>Add Player</Button>
+        <Button mt={3} onClick={onOpen}>Adicionar jogador</Button>
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Adicionar Jogador</ModalHeader>
+                <ModalHeader>Adicionar Jogador ao time {`"${team.name}"`}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <Select
