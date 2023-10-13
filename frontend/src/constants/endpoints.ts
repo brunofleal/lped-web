@@ -33,6 +33,15 @@ const endpoints = {
             method: 'PATCH',
         },
     },
+    auth: {
+        get: {
+            path: '/api/auth/:token',
+            pathParam: {
+                token: ':token',
+            },
+            method: 'GET',
+        },
+    },
 };
 
 export default endpoints;

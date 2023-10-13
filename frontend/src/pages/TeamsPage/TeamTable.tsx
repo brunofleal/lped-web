@@ -17,6 +17,7 @@ import { AxiosRequestConfig } from 'axios';
 import React, { useEffect, useState } from 'react';
 
 import endpoints from '../../constants/endpoints';
+import { isAuthTokenValid } from '../../hooks/auth';
 import { getValidPlayerName } from '../../hooks/playerUtils';
 import { PlayerModel } from '../../models/PlayerModel';
 import { TeamModel } from '../../models/TeamModel';
@@ -35,7 +36,7 @@ const TeamTable = ({ team, styleIndex }: TeamTableProps) => {
     const tableColorNext = TEAM_COLORS[((styleIndex ?? 0) + 1) % TEAM_COLORS.length];
 
 
-    const isAdmin = true;
+    const isAdmin = isAuthTokenValid();
     return <Box boxShadow='md' p={2} rounded='md' bg='white'>
         <Text
             bgGradient={`linear(to-r, ${tableColor}, ${tableColorNext})`}
