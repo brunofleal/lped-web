@@ -1,5 +1,5 @@
 cd frontend
 yarn
 yarn build
-cd ../frontend
+cd ../backend
 yarn
