@@ -1,11 +1,21 @@
-import { Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import {
+    HStack, Icon, Image, Link as ChakraLink, Table,
+    TableContainer, Tbody, Td, Text, Th, Thead, Tr,
+} from '@chakra-ui/react';
 import { AxiosRequestConfig } from 'axios';
 import React, { useEffect, useState } from 'react';
+import { BiUserCircle } from 'react-icons/bi';
+import { BsFillPencilFill, BsSteam } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
 
 import endpoints from '../../constants/endpoints';
+import { isAuthTokenValid } from '../../hooks/auth';
 import { getValidPlayerName } from '../../hooks/playerUtils';
 import { PlayerModel } from '../../models/PlayerModel';
 import axiosApi from '../../shared/axiosApi';
+import routes from '../../shared/routes';
+
+const stratzIconSrc = 'https://styles.redditmedia.com/t5_2l0u21/styles/communityIcon_6x27h20jket41.jpg';
 
 interface PlayerTableProps {
     players?: PlayerModel[];
@@ -46,8 +56,12 @@ const PlayersTable = ({ players, playerIds, captainDotaId, tableColor }: PlayerT
         <Table variant='striped' colorScheme={tableColor}>
             <Thead position={'sticky'}>
                 <Tr>
+                    <Th>
+                        <Icon as={BiUserCircle} width={'32px'} height={'32px'} />
+                    </Th>
                     <Th>Nome</Th>
-                    <Th>Dota Id</Th>
+                    <Th>Links</Th>
+                    {isAuthTokenValid() ? <Th>Edit</Th> : <></>}
                 </Tr>
             </Thead>
             <Tbody>
@@ -64,12 +78,45 @@ interface PlayerProps {
 const PlayerRow = ({ playerInfo, isCaptain }: PlayerProps) => {
     return <Tr>
         <Td>
+            <Image h={'50px'} w={'50px'} src={playerInfo.stratzApi.steamAccount.avatar} />
+        </Td>
+        <Td>
             <Text fontWeight={isCaptain ? 'bold' : 'normal'}>{isCaptain ? '[C]' : <></>}
                 {getValidPlayerName(playerInfo)}
             </Text>
         </Td>
-        <Td>{String(playerInfo?.dotaId)}</Td>
+        <Td>
+            <PlayerLinks player={playerInfo} />
+        </Td>
+        {isAuthTokenValid() ? <Td>
+            <Link
+                to={
+                    routes.EditPlayerPage.path.replace(routes.EditPlayerPage.pathParam.id,
+                        String(playerInfo.dotaId))
+                }
+            >
+                <BsFillPencilFill />
+            </Link>
+        </Td> : <></>}
+
     </Tr>;
+};
+
+const PlayerLinks = ({ player }: { player: PlayerModel; }) => {
+    return <HStack>
+        <ChakraLink
+            href={`https://stratz.com/players/${String(player?.dotaId)}`}
+            isExternal={true}
+        >
+            <Image w={25} h={25} src={stratzIconSrc} borderRadius={'25%'} />
+        </ChakraLink>;
+        <ChakraLink
+            href={player.stratzApi.steamAccount.profileUri}
+            isExternal={true}
+        >
+            <Icon as={BsSteam} w={25} h={25} borderRadius={'25%'} />
+        </ChakraLink>
+    </HStack>;
 };
 
 export default PlayersTable;

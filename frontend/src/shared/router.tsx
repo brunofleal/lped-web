@@ -2,6 +2,7 @@ import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import PageWrapper from '../components/PageWrapper/PageWrapper';
+import EditPlayerPage from '../pages/EditPlayerPage/EditPlayerPage';
 import HomePage from '../pages/HomePage/HomePage';
 import ManagementPage from '../pages/ManagementPage/ManagementPage';
 import PlayersPage from '../pages/PlayersPage/PlayersPage';
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
             {
                 path: routes.ManagementPage.path,
                 element: <ManagementPage />,
+            },
+            {
+                path: routes.EditPlayerPage.path,
+                element: <EditPlayerPage />,
             },
         ],
     },

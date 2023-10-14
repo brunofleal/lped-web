@@ -5,6 +5,12 @@ const routes = {
     PlayersPage: {
         path: '/players',
     },
+    EditPlayerPage: {
+        path: '/player/:id',
+        pathParam: {
+            id: ':id',
+        },
+    },
     TeamsPage: {
         path: '/teams',
     },
