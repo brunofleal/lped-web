@@ -3,7 +3,7 @@ import React from 'react';
 import { TwitchEmbed } from 'react-twitch-embed';
 
 
-const partnerChannels = ['ursope', 'art__np', 'barzaky', 'ramoncardias', 'yaphets4k'];
+const partnerChannels = ['art__np', 'barzaky', 'ramoncardias', 'ursope', 'yaphets4k'];
 
 const TwitchSection = () => {
     return <Grid templateColumns='repeat(3, 1fr)' gap={2}>

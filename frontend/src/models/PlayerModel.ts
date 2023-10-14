@@ -1,6 +1,10 @@
 export interface StratzApi {
     identity: { name?: string; };
-    steamAccount: { name?: string; };
+    steamAccount: {
+        name?: string;
+        profileUri?: string;
+        avatar?: string;
+    };
     names?: { name: string; }[];
 }
 
