@@ -12,6 +12,7 @@ const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
 const listEndpoints = require("express-list-endpoints");
 const bodyParser = require("body-parser");
+const path = require('path');
 
 const app = express();
 
@@ -48,12 +49,7 @@ app.options('*', cors());
 app.use('/api', router);
 
 
-// send back a 404 error for any unknown api request
-app.use((req, res, next) => {
-    next(new ApiError(httpStatus.NOT_FOUND, 'Not found' + req.baseUrl));
-});
-
-if (config.env !== 'test') {
+if (config.env === 'test') {
     console.log('Available routes:');
     console.log(listEndpoints(app));
 }
@@ -63,5 +59,19 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
+
+app.use(express.static(path.resolve(__dirname, '../../frontend/build'))); // Serve frontend build
+
+// All other GET requests not handled before will return our React app
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../../frontend/build', 'index.html'));
+});
+
+/*
+// send back a 404 error for any unknown api request
+app.use((req, res, next) => {
+    next(new ApiError(httpStatus.NOT_FOUND, 'Not found' + req.baseUrl));
+});
+ */
 
 module.exports = app;
