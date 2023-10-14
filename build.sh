@@ -2,4 +2,4 @@ cd frontend
 yarn
 yarn build
 cd ../backend
-yarn
+yarn install --ignore-engines
