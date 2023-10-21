@@ -78,7 +78,11 @@ interface PlayerProps {
 const PlayerRow = ({ playerInfo, isCaptain }: PlayerProps) => {
     return <Tr>
         <Td>
-            <Image h={'50px'} w={'50px'} src={playerInfo.stratzApi.steamAccount.avatar} />
+            <Image h={'50px'} w={'50px'}
+                src={playerInfo.stratzApi.steamAccount.avatar}
+                fallback={<Icon as={BiUserCircle} />}
+                loading="lazy"
+            />
         </Td>
         <Td>
             <Text fontWeight={isCaptain ? 'bold' : 'normal'}>{isCaptain ? '[C]' : <></>}
@@ -108,7 +112,12 @@ const PlayerLinks = ({ player }: { player: PlayerModel; }) => {
             href={`https://stratz.com/players/${String(player?.dotaId)}`}
             isExternal={true}
         >
-            <Image w={25} h={25} src={stratzIconSrc} borderRadius={'25%'} />
+            <Image w={25} h={25}
+                src={stratzIconSrc}
+                borderRadius={'25%'}
+                fallback={<Icon as={BiUserCircle} />}
+                loading="lazy"
+            />
         </ChakraLink>;
         <ChakraLink
             href={player.stratzApi.steamAccount.profileUri}
