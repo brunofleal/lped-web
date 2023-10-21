@@ -9,11 +9,23 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
+import ClassificationTable from './ClassificationTable/ClassificationTable';
 import TwitchSection from './TwitchSection/TwitchSection';
 
 const HomePage = () => {
     return <Box mt={4}>
-        <Accordion allowToggle>
+        <Accordion allowToggle defaultIndex={1}>
+            <AccordionItem>
+                <AccordionButton>
+                    <Box as="span" flex='1' textAlign='left'>
+                        <Text fontSize='2xl' fontWeight='bold'>Classificação</Text>
+                    </Box>
+                    <AccordionIcon />
+                </AccordionButton>
+                <AccordionPanel pb={4}>
+                    <ClassificationTable />
+                </AccordionPanel>
+            </AccordionItem>
             <AccordionItem>
                 <AccordionButton>
                     <Box as="span" flex='1' textAlign='left'>
@@ -23,17 +35,6 @@ const HomePage = () => {
                 </AccordionButton>
                 <AccordionPanel pb={4}>
                     <TwitchSection />
-                </AccordionPanel>
-            </AccordionItem>
-            <AccordionItem>
-                <AccordionButton>
-                    <Box as="span" flex='1' textAlign='left'>
-                        <Text fontSize='2xl' fontWeight='bold'>Classificação</Text>
-                    </Box>
-                    <AccordionIcon />
-                </AccordionButton>
-                <AccordionPanel pb={4}>
-                    Sob Construção
                 </AccordionPanel>
             </AccordionItem>
             <AccordionItem>
