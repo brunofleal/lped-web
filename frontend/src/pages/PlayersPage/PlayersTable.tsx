@@ -8,6 +8,7 @@ import { BiUserCircle } from 'react-icons/bi';
 import { BsFillPencilFill, BsSteam } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 
+import stratzIcon from '../../assets/images/stratz.jpg';
 import endpoints from '../../constants/endpoints';
 import { isAuthTokenValid } from '../../hooks/auth';
 import { getValidPlayerName } from '../../hooks/playerUtils';
@@ -15,7 +16,6 @@ import { PlayerModel } from '../../models/PlayerModel';
 import axiosApi from '../../shared/axiosApi';
 import routes from '../../shared/routes';
 
-const stratzIconSrc = 'https://styles.redditmedia.com/t5_2l0u21/styles/communityIcon_6x27h20jket41.jpg';
 
 interface PlayerTableProps {
     players?: PlayerModel[];
@@ -113,14 +113,14 @@ const PlayerLinks = ({ player }: { player: PlayerModel; }) => {
             isExternal={true}
         >
             <Image w={25} h={25}
-                src={stratzIconSrc}
+                src={stratzIcon}
                 borderRadius={'25%'}
                 fallback={<Icon as={BiUserCircle} />}
                 loading="lazy"
             />
         </ChakraLink>;
         <ChakraLink
-            href={player.stratzApi.steamAccount.profileUri}
+            href={player.stratzApi.steamAccount.profileUri?.replace('htpps', 'http')}
             isExternal={true}
         >
             <Icon as={BsSteam} w={25} h={25} borderRadius={'25%'} />
