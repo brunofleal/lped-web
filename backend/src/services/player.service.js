@@ -5,7 +5,6 @@ const { getPlayerInfo } = require('./stratz.service');
 
 const createPlayer = async (playerBody) => {
     const playerWithStratzData = await addStratzDataToPlayer(playerBody);
-    console.log({ playerWithStratzData });
     let newPlayer = Player.create(playerWithStratzData);
     return newPlayer;
 };

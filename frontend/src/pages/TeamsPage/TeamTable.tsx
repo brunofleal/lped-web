@@ -1,6 +1,7 @@
 import {
     Box,
     Button,
+    HStack,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -27,11 +28,10 @@ import PlayersTable from '../PlayersPage/PlayersTable';
 interface TeamTableProps {
     team: TeamModel;
     styleIndex?: number;
-    children?: JSX.Element;
 }
-const TEAM_COLORS = ['red', 'green', 'yellow', 'blue', 'purple', 'pink', 'teal', 'orange', 'whatsapp'];
+const TEAM_COLORS = ['gold', '#C0C0C0', '#cd7f32', 'blue', 'purple', 'pink', 'teal', 'orange', 'whatsapp'];
 
-const TeamTable = ({ team, styleIndex, children }: TeamTableProps) => {
+const TeamTable = ({ team, styleIndex }: TeamTableProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const tableColor = TEAM_COLORS[(styleIndex ?? 0) % TEAM_COLORS.length];
     const tableColorNext = TEAM_COLORS[((styleIndex ?? 0) + 1) % TEAM_COLORS.length];
@@ -39,12 +39,28 @@ const TeamTable = ({ team, styleIndex, children }: TeamTableProps) => {
 
     const isAdmin = isAuthTokenValid();
     return <Box boxShadow='md' p={2} rounded='md' bg='white'>
-        <Text
-            bgGradient={`linear(to-r, ${tableColor}, ${tableColorNext})`}
-            bgClip='text'
-            fontSize='2xl'
-            fontWeight='extrabold'>{team.name}</Text>
-        {children ? children : <></>}
+        <HStack>
+            <Text
+                bgGradient={`linear(to-r, ${tableColor}, ${tableColorNext})`}
+                bgClip='text'
+                fontSize='2xl'
+                fontWeight='extrabold'>{team.name}
+            </Text>
+            {team.ranking !== undefined ?
+                <Text
+                    bgColor='black'
+                    bgClip='text'
+                    fontSize='2xl'
+                    fontWeight='extrabold'
+                    border='gray solid 1px'
+                    borderRadius='25%'
+                    py={0}
+                    px={1}
+                >
+                    {team.ranking + 1}º
+                </Text> : <></>
+            }
+        </HStack>
         <PlayersTable
             captainDotaId={team.captainDotaId}
             playerIds={[team.captainDotaId, ...team.playerIds]}

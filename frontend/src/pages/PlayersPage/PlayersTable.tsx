@@ -8,7 +8,7 @@ import { BiUserCircle } from 'react-icons/bi';
 import { BsFillPencilFill, BsSteam } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 
-import stratzIcon from '../../assets/images/stratz.jpg';
+import dotaIcon from '../../assets/images/dota.png';
 import endpoints from '../../constants/endpoints';
 import { isAuthTokenValid } from '../../hooks/auth';
 import { getValidPlayerName } from '../../hooks/playerUtils';
@@ -113,7 +113,7 @@ const PlayerLinks = ({ player }: { player: PlayerModel; }) => {
             isExternal={true}
         >
             <Image w={25} h={25}
-                src={stratzIcon}
+                src={dotaIcon}
                 borderRadius={'25%'}
                 fallback={<Icon as={BiUserCircle} />}
                 loading="lazy"

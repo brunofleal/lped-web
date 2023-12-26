@@ -2,6 +2,7 @@
 export interface TeamModel {
     id: string;
     name: String;
-    captainDotaId: Number;
+    captainDotaId: number;
     playerIds: Number[];
+    ranking?: number;
 }

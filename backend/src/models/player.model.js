@@ -17,6 +17,11 @@ const playerSchema = mongoose.Schema(
             required: false,
             default: 'player',
         },
+        seasons: {
+            type: [Number],
+            default: [0],
+            required: true
+        },
         positionPrefs: {
             type: Array,
             default: [],
