@@ -11,19 +11,23 @@ import {
     ModalHeader,
     ModalOverlay,
     Select,
+    Text,
     useDisclosure,
+    useToast,
 } from '@chakra-ui/react';
 import { AxiosRequestConfig } from 'axios';
 import React, { useEffect, useState } from 'react';
 
 import endpoints from '../../../constants/endpoints';
+import { MatchModel } from '../../../models/MatchModel';
 import { TeamModel } from '../../../models/TeamModel';
 import axiosApi from '../../../shared/axiosApi';
 
 const AddMatchModal = () => {
+    const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [winningTeamId, setWinningTeamId] = useState<string>('');
-    const [losingTeamId, setLosingTeamId] = useState<string>('');
+    const [winnerTeamId, setWinnerTeamId] = useState<string>('');
+    const [loserTeamId, setLoserTeamId] = useState<string>('');
     const [vodUrl, setVodUrl] = useState<string>('');
     const [matchId, setMatchId] = useState<string>('');
 
@@ -43,8 +47,25 @@ const AddMatchModal = () => {
     }, []);
 
     const handleCreateMatch = () => {
-        console.log('TODO:');
+        const match: MatchModel = { winnerTeamId, loserTeamId, matchId, vodUrl };
+        const teamOptionsConfig: AxiosRequestConfig = {
+            url: endpoints.match.add.path,
+            method: endpoints.match.add.method,
+            data: match,
+        };
+        axiosApi.request(teamOptionsConfig).then((response) => {
+            if (response.status === 201) {
+                setTeamOptions(response.data.results);
+                toast({ title: 'Partida registrada', status: 'success', position: 'top' });
+                onClose();
+            } else {
+                toast({ title: 'Falha no registro da partida', status: 'error', position: 'top' });
+            }
+        }).catch(() => {
+            toast({ title: 'Falha no registro da partida', status: 'error', position: 'top' });
+        });
     };
+
 
     return (
         <>
@@ -60,9 +81,12 @@ const AddMatchModal = () => {
                     <ModalCloseButton />
                     <ModalBody pb={6}>
                         <FormControl>
-                            <FormLabel>Time Vencedor</FormLabel>
-                            <Select placeholder='Time vencedor' value={winningTeamId}
-                                onChange={(event) => setWinningTeamId(event.target.value)} >
+                            <FormLabel color='green'>Time Vencedor</FormLabel>
+                            <Select
+                                placeholder='Escolha um time'
+                                value={winnerTeamId}
+                                onChange={(event) => setWinnerTeamId(event.target.value)}
+                            >
                                 {teamOptions.map((opt) => {
                                     return <option key={opt.id} value={opt.id}>{opt.name}</option>;
                                 })
@@ -71,9 +95,12 @@ const AddMatchModal = () => {
                         </FormControl>
 
                         <FormControl>
-                            <FormLabel>Time Perdedor</FormLabel>
-                            <Select placeholder='Time perdedor' value={losingTeamId}
-                                onChange={(event) => setLosingTeamId(event.target.value)} >
+                            <FormLabel color='red'>Time Perdedor</FormLabel>
+                            <Select
+                                placeholder='Escolha um time'
+                                value={loserTeamId}
+                                onChange={(event) => setLoserTeamId(event.target.value)}
+                            >
                                 {teamOptions.map((opt) => {
                                     return <option key={opt.id} value={opt.id}>{opt.name}</option>;
                                 })
@@ -90,11 +117,17 @@ const AddMatchModal = () => {
                             <FormLabel>Id da partida*</FormLabel>
                             <Input value={matchId} onChange={(event) => setMatchId(event.target.value)} />
                         </FormControl>
+                        <Text>*Opcionais</Text>
                     </ModalBody>
 
                     <ModalFooter>
                         <Button onClick={onClose} mr={3}>Cancelar</Button>
-                        <Button colorScheme='blue' onClick={handleCreateMatch} >
+                        <Button colorScheme='blue'
+                            isDisabled={
+                                !winnerTeamId || !loserTeamId ||
+                                winnerTeamId === loserTeamId
+                            }
+                            onClick={handleCreateMatch} >
                             Salvar
                         </Button>
                     </ModalFooter>

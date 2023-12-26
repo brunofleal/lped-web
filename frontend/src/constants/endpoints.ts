@@ -22,13 +22,34 @@ const endpoints = {
             method: 'POST',
         },
         list: {
-            path: '/api/team',
+            path: '/api/team?limit=1000',
             method: 'GET',
         },
         update: {
             path: '/api/team/:teamid',
             pathParam: {
                 teamid: ':teamid',
+            },
+            method: 'PATCH',
+        },
+    },
+    match: {
+        add: {
+            path: '/api/match',
+            reqBodyParams: {
+                winnerTeam: 'winnerTeam',
+                loserTeam: 'loserTeam',
+            },
+            method: 'POST',
+        },
+        list: {
+            path: '/api/match',
+            method: 'GET',
+        },
+        update: {
+            path: '/api/match/:matchId',
+            pathParam: {
+                matchId: ':matchId',
             },
             method: 'PATCH',
         },

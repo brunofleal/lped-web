@@ -18,7 +18,7 @@ const matchSchema = mongoose.Schema(
             type: String,
             required: false,
         },
-        vod: {
+        vodUrl: {
             type: String,
             required: false,
         },
