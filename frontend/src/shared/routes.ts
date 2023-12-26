@@ -14,6 +14,9 @@ const routes = {
     TeamsPage: {
         path: '/teams',
     },
+    SeasonsPage: {
+        path: '/seasons',
+    },
     ManagementPage: {
         path: '/management',
     },

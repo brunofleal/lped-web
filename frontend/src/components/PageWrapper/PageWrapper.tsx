@@ -9,7 +9,11 @@ const PageWrapper: FC = () => {
     const { pathname } = useLocation();
     const linkProps = (route: string) => {
         return {
-            href: route, textDecoration: pathname === route ? 'underline' : 'none', fontSize: 24, fontWeight: 'bold', _hover: { color: 'white' },
+            href: route,
+            textDecoration: pathname === route ? 'underline' : 'none',
+            fontSize: 24,
+            fontWeight: 'bold',
+            _hover: { color: 'white' },
         };
     };
 
@@ -34,11 +38,17 @@ const PageWrapper: FC = () => {
                     </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbItem>
+                    <BreadcrumbLink {...linkProps(routes.SeasonsPage.path)} href={routes.SeasonsPage.path}>
+                        Temporadas Completas
+                    </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbItem>
                     <BreadcrumbLink {...linkProps(routes.ManagementPage.path)} href={routes.ManagementPage.path}>
                         Gerenciamento
                     </BreadcrumbLink>
                 </BreadcrumbItem>
-            </Breadcrumb></VStack>
+            </Breadcrumb>
+        </VStack>
         <Box bgColor={'white'} w={'100vw'} overflowY={'auto'} p={4}>
             <Outlet />
         </Box >

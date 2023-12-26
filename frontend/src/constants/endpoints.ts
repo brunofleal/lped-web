@@ -22,8 +22,11 @@ const endpoints = {
             method: 'POST',
         },
         list: {
-            path: '/api/team?limit=1000',
+            path: '/api/team?season=:season&limit=1000&sortBy=ranking',
             method: 'GET',
+            queryParams: {
+                season: ':season',
+            },
         },
         update: {
             path: '/api/team/:teamid',
@@ -31,6 +34,12 @@ const endpoints = {
                 teamid: ':teamid',
             },
             method: 'PATCH',
+        },
+    },
+    season: {
+        get: {
+            path: '/api/season',
+            method: 'GET',
         },
     },
     match: {

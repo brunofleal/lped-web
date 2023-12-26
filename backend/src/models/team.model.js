@@ -15,13 +15,14 @@ const teamSchema = mongoose.Schema(
             type: Array,
             required: true,
         },
-        wins: {
+        season: {
             type: Number,
-            required: false,
+            default: 0,
+            required: true
         },
-        losses: {
+        season: {
             type: Number,
-            required: false,
+            required: true
         }
     },
     {

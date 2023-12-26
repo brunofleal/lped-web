@@ -27,10 +27,11 @@ import PlayersTable from '../PlayersPage/PlayersTable';
 interface TeamTableProps {
     team: TeamModel;
     styleIndex?: number;
+    children?: JSX.Element;
 }
 const TEAM_COLORS = ['red', 'green', 'yellow', 'blue', 'purple', 'pink', 'teal', 'orange', 'whatsapp'];
 
-const TeamTable = ({ team, styleIndex }: TeamTableProps) => {
+const TeamTable = ({ team, styleIndex, children }: TeamTableProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const tableColor = TEAM_COLORS[(styleIndex ?? 0) % TEAM_COLORS.length];
     const tableColorNext = TEAM_COLORS[((styleIndex ?? 0) + 1) % TEAM_COLORS.length];
@@ -43,6 +44,7 @@ const TeamTable = ({ team, styleIndex }: TeamTableProps) => {
             bgClip='text'
             fontSize='2xl'
             fontWeight='extrabold'>{team.name}</Text>
+        {children ? children : <></>}
         <PlayersTable
             captainDotaId={team.captainDotaId}
             playerIds={[team.captainDotaId, ...team.playerIds]}

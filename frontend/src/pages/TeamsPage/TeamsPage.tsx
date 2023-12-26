@@ -7,18 +7,39 @@ import { TeamModel } from '../../models/TeamModel';
 import axiosApi from '../../shared/axiosApi';
 import TeamTable from './TeamTable';
 
-const TeamsPage = () => {
+interface TeamsPageProps {
+    previousSeason?: number;
+}
+
+const TeamsPage = ({ previousSeason }: TeamsPageProps) => {
+    const [season, setSeason] = useState(0);
     const [teams, setTeams] = useState<TeamModel[]>([]);
-    const getTeamsRequest: AxiosRequestConfig = { url: endpoints.team.list.path, method: endpoints.team.list.method };
+    const getCurrentSeasonRequest: AxiosRequestConfig = {
+        url: endpoints.season.get.path,
+        method: endpoints.season.get.method,
+    };
+    const getTeamsRequest: AxiosRequestConfig = {
+        url: endpoints.team.list.path.replace(endpoints.team.list.queryParams.season, String(season)),
+        method: endpoints.team.list.method,
+    };
+
+    useEffect(() => {
+        if (previousSeason === undefined) {
+            axiosApi.request(getCurrentSeasonRequest).then((response) => {
+                if (response.status === 200) {
+                    setSeason(response.data.currentSeason);
+                }
+            });
+        }
+    }, [previousSeason]);
+
     useEffect(() => {
         axiosApi.request(getTeamsRequest).then((response) => {
             if (response.status === 200) {
                 setTeams(response.data.results);
-            } else {
-                console.log('TODO: Toast error');
             }
         });
-    }, []);
+    }, [season]);
 
     return <Box mt={4}>
         <Text
@@ -27,7 +48,7 @@ const TeamsPage = () => {
             fontSize='6xl'
             fontWeight='extrabold'
         >
-            Times
+            {season !== undefined ? `Times Temporada ${season + 1}` : 'Times Temporada Atual'}
         </Text>
         <Grid templateColumns='repeat(3, 2fr)' alignContent={'center'} gap={6}>
             {

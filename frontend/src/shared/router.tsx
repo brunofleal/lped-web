@@ -5,6 +5,7 @@ import PageWrapper from '../components/PageWrapper/PageWrapper';
 import EditPlayerPage from '../pages/EditPlayerPage/EditPlayerPage';
 import HomePage from '../pages/HomePage/HomePage';
 import ManagementPage from '../pages/ManagementPage/ManagementPage';
+import PastSeasonsPage from '../pages/PastSeasonsPage/PastSeasonsPage';
 import PlayersPage from '../pages/PlayersPage/PlayersPage';
 import TeamsPage from '../pages/TeamsPage/TeamsPage';
 import routes from './routes';
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
             {
                 path: routes.TeamsPage.path,
                 element: <TeamsPage />,
+            },
+            {
+                path: routes.SeasonsPage.path,
+                element: <PastSeasonsPage />,
             },
             {
                 path: routes.ManagementPage.path,
