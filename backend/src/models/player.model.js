@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { toJSON, paginate } = require('./plugins');
 
-const playerClass = ['player', 'captain'];
+const playerClass = ['player', 'captain', 'standing'];
 
 const playerSchema = mongoose.Schema(
     {
@@ -23,10 +23,10 @@ const playerSchema = mongoose.Schema(
             required: true
         },
         positionPrefs: {
-            type: Array,
+            type: [Number],
             default: [],
             required: false,
-        }
+        },
     },
     {
         timestamps: true,

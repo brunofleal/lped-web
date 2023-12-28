@@ -4,13 +4,19 @@ export interface StratzApi {
         name?: string;
         profileUri?: string;
         avatar?: string;
+        seasonRank?: string;
     };
     names?: { name: string; }[];
 }
 
 export interface PlayerModel {
     name: string;
-    teamId?: string;
     dotaId: Number;
     stratzApi: StratzApi;
+    teamId?: string;
+    avatarUrl?: string;
+    positionPrefs?: number[];
+    playerClass?: 'player' | 'captain' | 'standing';
+    rankMedal?: number;
+    tier?: number;
 }
