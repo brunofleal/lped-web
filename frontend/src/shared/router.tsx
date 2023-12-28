@@ -4,6 +4,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import PageWrapper from '../components/PageWrapper/PageWrapper';
 import EditPlayerPage from '../pages/EditPlayerPage/EditPlayerPage';
 import HomePage from '../pages/HomePage/HomePage';
+import SignupPage from '../pages/HomePage/SignupPage/SignupPage';
 import ManagementPage from '../pages/ManagementPage/ManagementPage';
 import PastSeasonsPage from '../pages/PastSeasonsPage/PastSeasonsPage';
 import PlayersPage from '../pages/PlayersPage/PlayersPage';
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
             {
                 path: routes.EditPlayerPage.path,
                 element: <EditPlayerPage />,
+            },
+            {
+                path: routes.SignupPage.path,
+                element: <SignupPage />,
             },
         ],
     },

@@ -42,6 +42,22 @@ const endpoints = {
             method: 'GET',
         },
     },
+    steam: {
+        auth: {
+            path: '/api/steam/auth',
+            method: 'GET',
+        },
+
+    },
+    stratz: {
+        get: {
+            path: '/api/stratz/:id',
+            method: 'GET',
+            pathParam: {
+                id: ':id',
+            },
+        },
+    },
     match: {
         add: {
             path: '/api/match',

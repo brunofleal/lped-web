@@ -1,3 +1,4 @@
+
 const routes = {
     HomePage: {
         path: '/',
@@ -19,6 +20,9 @@ const routes = {
     },
     ManagementPage: {
         path: '/management',
+    },
+    SignupPage: {
+        path: '/signup',
     },
 };
 

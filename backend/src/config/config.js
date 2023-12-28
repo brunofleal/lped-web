@@ -10,7 +10,8 @@ const envVarsSchema = Joi.object()
         PORT: Joi.number().default(8000),
         MONGODB_URL: Joi.string().required().description('Mongo DB url'),
         STRATZ_API_TOKEN: Joi.string().required().description('Stratz api token'),
-        ADMIN_AUTH_TOKEN: Joi.string().required().description('Stratz api token')
+        ADMIN_AUTH_TOKEN: Joi.string().required().description('admin pass'),
+        STEAM_API_KEY: Joi.string().required().description('admin pass'),
     })
     .unknown();
 
@@ -41,5 +42,8 @@ module.exports = {
     },
     auth: {
         token: envVars.ADMIN_AUTH_TOKEN
+    },
+    steam: {
+        token: envVars.STEAM_API_KEY
     }
 };

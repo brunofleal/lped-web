@@ -16,11 +16,31 @@ const path = require('path');
 
 const app = express();
 
+const passport = require('passport');
+const SteamStrategy = require('passport-steam').Strategy;
+
+passport.use(new SteamStrategy({
+    returnURL: 'http://localhost:3000/signup',
+    realm: 'http://localhost:3000/',
+    apiKey: config.steam.token
+},
+    function (identifier, profile, done) {
+        User.findByOpenID({ openId: identifier }, function (err, user) {
+            return done(err, user);
+        });
+    }
+));
+
+
 if (config.env !== 'test') {
     app.use(morgan.successHandler);
     app.use(morgan.errorHandler);
     console.log(listEndpoints(app));
 }
+
+// Passport init
+app.use(passport.initialize());
+app.use(passport.session());
 
 // set security HTTP headers
 app.use(helmet());
