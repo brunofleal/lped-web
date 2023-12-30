@@ -1,6 +1,8 @@
+/* eslint-disable max-len */
 import {
     Box,
     Button,
+    ButtonGroup,
     Checkbox,
     FormControl,
     FormHelperText,
@@ -20,77 +22,118 @@ import {
     useToast,
 } from '@chakra-ui/react';
 import { Badge } from '@chakra-ui/react';
-import { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig, Method } from 'axios';
 import React, { useEffect, useState } from 'react';
-import { BsInfoCircle } from 'react-icons/bs';
+import { BsInfoCircleFill } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 
 import Medal from '../../../../components/Medal/Medal';
 import RoleSelect from '../../../../components/RoleSelect/RoleSelect';
 import endpoints from '../../../../constants/endpoints';
 import { registerAvatar } from '../../../../hooks/avatar';
+import useFetch from '../../../../hooks/Fetch';
 import { retrieveToken } from '../../../../hooks/token';
 import { PlayerType } from '../../../../models/Player/PlayerType';
 import { getTierFromPlayerModel } from '../../../../models/Player/Tier';
 import { PlayerModel, StratzApi } from '../../../../models/PlayerModel';
-import axiosApi from '../../../../shared/axiosApi';
+import RegisterStatus from './RegisterStatus';
+import { ConfirmProps, getHelperText, isConfirmEnabled } from './utils';
+
+const participationTooltip = `(1-) A função de Jogador é indicada para os participantes com disposnibilidade para jogos semanais/quinzenais.
+(2-) A Função de capitão está sujeita a aprovação da organização e requer demandas extra jogo(organização de partidas, comunicação, etc).
+(3-) A função de Standing é indicada para os participantes com menor disponibilidade de tempo, podendo completar partidas ocasionalmente.`;
 
 interface Props {
     stratzData?: StratzApi;
 }
 const LeagueSignupForm = ({ stratzData }: Props) => {
+    const navigate = useNavigate();
     const toast = useToast();
     const rulesLink = 'https://pastebin.com/ky1ZpqiZ';
     const [playerModel, setPlayerModel] = useState<PlayerModel>();
     const [primaryRole, setPrimaryRole] = useState(0);
     const [secondaryRole, setSecondaryRole] = useState(0);
 
-    const [loadedPlayerSavedData, setLoadedPlayerSavedData] = useState<boolean>(false);
     const [checked, setChecked] = useState(false);
 
     const steamId3 = retrieveToken();
 
-    const handleLoadPlayerData = () => {
-        const getConfig: AxiosRequestConfig = {
-            url: `${endpoints.player.list.path}?dotaId=${steamId3 ?? ''}`,
-            method: endpoints.player.list.method,
-        };
-        axiosApi.request(getConfig).then((response) => {
-            if (response.status === 200 && response.data.results) {
-                setPlayerModel(response.data.results[0]);
-            }
-        }).catch(() => {
-            toast({ status: 'error', title: 'Erro no carregamento de dados da steam', position: 'top' });
-        }).finally(() => {
-            setLoadedPlayerSavedData(true);
-        });
-    };
+    const { data: savedPlayerModel, fetch: fetchPlayer } = useFetch<PlayerModel>({
+        axiosConfig: {
+            url: steamId3 ? endpoints.player.getOne.path.replace(endpoints.player.getOne.pathParam.dotaId, steamId3) : '',
+            method: endpoints.player.getOne.method as Method,
+        },
+        controlFetch: true,
+        onError: () => toast({ status: 'error', title: 'Erro no carregamento de dados da steam', position: 'top' }),
+    });
+
+    const { fetch: fetchRegisterPlayer } = useFetch({
+        axiosConfig: {
+            url: endpoints.player.add.path,
+        },
+        controlFetch: true,
+        onError: () => toast({ status: 'error', title: 'Erro no Registro de Jogador', position: 'top' }),
+        onSuccess: () => {
+            toast({ status: 'success', title: 'Jogador Registrado!', position: 'top' });
+            navigate(0);
+        },
+    });
+
+    const { fetch: fetchUpdatePlayer } = useFetch({
+        axiosConfig: {
+            url: steamId3 ? endpoints.player.edit.path.replace(endpoints.player.edit.pathParam.dotaId, steamId3) : '',
+
+        },
+        controlFetch: true,
+        onError: () => toast({ status: 'error', title: 'Erro na atualização de Jogador', position: 'top' }),
+        onSuccess: () => {
+            toast({ status: 'success', title: 'Jogador Atualizado!', position: 'top' });
+            navigate(0);
+        },
+
+    });
+
+    const { data: seasonData } =
+        useFetch<{ currentSeason: number; }>({ axiosConfig: { url: endpoints.season.get.path, method: 'GET' } });
+    const currentSeason = seasonData ? seasonData.currentSeason : 0;
+
+    const confirmProps: ConfirmProps = { checked, playerModel, primaryRole, secondaryRole };
+
+
     useEffect(() => {
         if (steamId3) {
-            handleLoadPlayerData();
+            fetchPlayer();
         }
     }, [steamId3]);
 
-    const loadDataFromStratz = () => {
+    useEffect(() => {
+        if (savedPlayerModel && savedPlayerModel.positionPrefs) {
+            setPrimaryRole(savedPlayerModel.positionPrefs[0]);
+            setSecondaryRole(savedPlayerModel.positionPrefs[1]);
+        }
+    }, [savedPlayerModel]);
+
+
+    const loadPlayerData = () => {
         if (stratzData && steamId3) {
             const dataFromStratz: PlayerModel = {
                 name: stratzData?.identity.name ?? '',
                 dotaId: Number(steamId3),
                 stratzApi: stratzData,
-                playerClass: PlayerType.Jogador,
-                positionPrefs: [0, 0],
             };
-            dataFromStratz.tier = getTierFromPlayerModel(dataFromStratz);
-            const player: PlayerModel = { ...playerModel, ...dataFromStratz };
+            const player: PlayerModel = savedPlayerModel ?
+                { ...savedPlayerModel, ...dataFromStratz, name: savedPlayerModel?.name, tier: getTierFromPlayerModel(dataFromStratz) } :
+                { ...dataFromStratz, tier: getTierFromPlayerModel(dataFromStratz) };
             setPlayerModel(player);
             registerAvatar(stratzData?.steamAccount?.avatar ?? '');
         }
     };
 
     useEffect(() => {
-        if (loadedPlayerSavedData) {
-            loadDataFromStratz();
+        if (stratzData) {
+            loadPlayerData();
         }
-    }, [stratzData, loadedPlayerSavedData]);
+    }, [stratzData, savedPlayerModel]);
 
     useEffect(() => {
         if (playerModel) {
@@ -100,49 +143,59 @@ const LeagueSignupForm = ({ stratzData }: Props) => {
         }
     }, [primaryRole, secondaryRole]);
 
-    const getConfirmFlags = () => {
-        const nameSet = !!playerModel?.name;
-        const playerType = !!playerModel?.playerClass;
-        const rolesSet = primaryRole > 0 && secondaryRole > 0;
-        const rolesDifferent = primaryRole !== secondaryRole;
-        return {
-            nameSet, playerType, checked, rolesSet, rolesDifferent,
-        };
-    };
 
-    const getHelperText = () => {
-        const {
-            nameSet, playerType, checked, rolesSet, rolesDifferent,
-        } = getConfirmFlags();
-        if (!nameSet) {
-            return 'Preencha o campo Nickname';
-        }
-        if (!playerType) {
-            return 'Selecione o seu tipo de participação';
-        }
-        if (!rolesSet) {
-            return 'Escolha as funções primária e secundária';
-        }
-        if (!rolesDifferent) {
-            return 'Escolha funções primária e secundária diferentes';
-        }
-        if (!checked) {
-            return 'Leia as regras e confirme marcando a caixa';
+    const handleRegisterPlayer = () => {
+        const updatedSeasons = playerModel?.seasons ?? [];
+        updatedSeasons.push(currentSeason);
+        if (playerModel) {
+            const updatedPlayerModel: PlayerModel = { ...playerModel, seasons: updatedSeasons };
+            const customConfig: AxiosRequestConfig = {
+                url: steamId3 ? endpoints.player.add.path : '',
+                method: endpoints.player.add.method as Method,
+                data: { ...updatedPlayerModel },
+            };
+            fetchRegisterPlayer({ customConfig });
         }
     };
 
-    const isConfirmEnabled = () => {
-        const { checked, rolesSet, rolesDifferent, playerType } = getConfirmFlags();
-        return checked && rolesSet && rolesDifferent && playerType;
+    const handleUnregisterPlayer = () => {
+        let updatedSeasons = playerModel?.seasons ?? [];
+        updatedSeasons = updatedSeasons.filter((season) => season !== currentSeason);
+        if (playerModel) {
+            const updatedPlayerModel: PlayerModel = { ...playerModel, seasons: updatedSeasons };
+            const customConfig: AxiosRequestConfig = {
+                url: steamId3 ? endpoints.player.edit.path.replace(endpoints.player.edit.pathParam.dotaId, steamId3) : '',
+                method: endpoints.player.edit.method as Method,
+                data: { ...updatedPlayerModel },
+            };
+            fetchUpdatePlayer({ customConfig });
+        }
     };
 
+    const handleUpdatePlayerModel = () => {
+        const updatedSeasons = playerModel?.seasons ?? [];
+        updatedSeasons.push(currentSeason);
+        if (playerModel) {
+            const updatedPlayerModel: PlayerModel = { ...playerModel, seasons: updatedSeasons };
+            const customConfig: AxiosRequestConfig = {
+                url: steamId3 ? endpoints.player.edit.path.replace(endpoints.player.edit.pathParam.dotaId, steamId3) : '',
+                method: endpoints.player.edit.method as Method,
+                data: { ...updatedPlayerModel },
+            };
+            fetchUpdatePlayer({ customConfig });
+        }
+    };
+
+    const playerExistsInDb = !!savedPlayerModel;
+    const playerRegisteredInSeason = playerExistsInDb && savedPlayerModel.seasons?.includes(currentSeason);
 
     return <Box width='lg' borderWidth='1px' borderRadius='lg' p={2}>
         <FormControl>
+            <RegisterStatus isRegisteredInSeason={!!playerRegisteredInSeason} />
             <Grid templateColumns='repeat(4, 2fr)' gap={3}>
                 <GridItem colSpan={1}>
                     <FormLabel>Avatar</FormLabel>
-                    <Image h='100px' src={stratzData?.steamAccount?.avatar} />
+                    <Image h='100px' borderRadius='lg' src={stratzData?.steamAccount?.avatar} />
                 </GridItem>
                 <GridItem colSpan={2}>
                     <FormLabel>Nickname</FormLabel>
@@ -165,7 +218,9 @@ const LeagueSignupForm = ({ stratzData }: Props) => {
                 </GridItem>
                 <GridItem colSpan={4}>
                     <FormLabel>Participação no Campeonato
-                        <Tooltip label='TODO'><span><Icon as={BsInfoCircle} /></span></Tooltip>
+                        <Tooltip label={participationTooltip} placement='right' hasArrow={true}>
+                            <span><Icon ml={1} as={BsInfoCircleFill} /></span>
+                        </Tooltip>
                     </FormLabel>
                     <RadioGroup onChange={(value) => {
                         const updatedPlayer = { ...playerModel };
@@ -208,16 +263,32 @@ const LeagueSignupForm = ({ stratzData }: Props) => {
                     checked={checked}
                     onChange={(event) => setChecked(event.target.checked)}
                 />
-                <Text>Li as <Link color='blue' href={rulesLink} isExternal>
+                <Text fontSize={'xl'}>Li e concordo com as <Link color='blue' href={rulesLink} isExternal>
                     regras
-                </Link> da liga e concordo</Text>
+                </Link> e desejo participar da {currentSeason + 1}ª temporada da liga Mipe Alegre</Text>
             </HStack>
-            <FormHelperText color={'red'}>{getHelperText()}</FormHelperText>
+            <FormHelperText color={'red'}>{getHelperText(confirmProps)}</FormHelperText>
         </FormControl>
 
-        <Button colorScheme='blue' mt={3} isDisabled={!isConfirmEnabled()}>
-            Registrar
-        </Button>
+        {!playerExistsInDb || (playerExistsInDb && !playerRegisteredInSeason) ?
+            <Button
+                colorScheme='blue' mt={3}
+                isDisabled={!isConfirmEnabled(confirmProps)}
+                onClick={!playerExistsInDb ? handleRegisterPlayer : handleUpdatePlayerModel}>
+                Registrar
+            </Button> : <></>
+        }
+        {
+            playerExistsInDb && playerRegisteredInSeason ?
+                <ButtonGroup>
+                    <Button colorScheme='red' mt={3} isDisabled={!isConfirmEnabled(confirmProps)} onClick={handleUnregisterPlayer}>
+                        Remover seu Registro
+                    </Button>
+                    <Button colorScheme='blue' mt={3} isDisabled={!isConfirmEnabled(confirmProps)} onClick={handleUpdatePlayerModel}>
+                        Atualizar seu Registro
+                    </Button>
+                </ButtonGroup> : <></>
+        }
     </Box>;
 };
 

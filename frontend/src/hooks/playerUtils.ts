@@ -1,6 +1,9 @@
 import { PlayerModel } from '../models/PlayerModel';
 
 const getValidPlayerName = (playerInfo: PlayerModel) => {
+    if (playerInfo.name) {
+        return playerInfo.name;
+    }
     if (playerInfo?.stratzApi?.identity?.name) {
         return playerInfo?.stratzApi?.identity?.name;
     }

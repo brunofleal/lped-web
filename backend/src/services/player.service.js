@@ -4,16 +4,8 @@ const ApiError = require('../utils/ApiError');
 const { getPlayerInfo } = require('./stratz.service');
 
 const createPlayer = async (playerBody) => {
-    const playerWithStratzData = await addStratzDataToPlayer(playerBody);
-    let newPlayer = Player.create(playerWithStratzData);
+    let newPlayer = Player.create(playerBody);
     return newPlayer;
-};
-
-const addStratzDataToPlayer = async (playerBody) => {
-    const playerData = {
-        ...playerBody, stratzApi: { ...await getPlayerInfo(playerBody.dotaId) }
-    };
-    return playerData;
 };
 
 const queryPlayers = async (filter, options) => {
@@ -42,9 +34,6 @@ const updatePlayerByDotaId = async (dotaId, updateBody) => {
     if (!Player) {
         throw new ApiError(httpStatus.NOT_FOUND, 'Player not found');
     }
-    if (updateBody.dotaId && (await Player.isDotaIdTaken(updateBody.dotaId, dotaId))) {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Player with dotaId already exists');
-    }
     Object.assign(Player, updateBody);
     await Player.save();
     return Player;
@@ -69,6 +58,15 @@ const deletePlayerById = async (PlayerId) => {
     return Player;
 };
 
+const deletePlayerByDotaId = async (dotaId) => {
+    const Player = await getPlayerByDotaId(dotaId);
+    if (!Player) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'Player not found');
+    }
+    await Player.remove();
+    return Player;
+};
+
 module.exports = {
     createPlayer,
     queryPlayers,
@@ -78,4 +76,5 @@ module.exports = {
     updatePlayerById,
     updatePlayerByDotaId,
     deletePlayerById,
+    deletePlayerByDotaId
 };

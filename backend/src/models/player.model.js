@@ -5,6 +5,10 @@ const playerClass = ['player', 'captain', 'standing'];
 
 const playerSchema = mongoose.Schema(
     {
+        name: {
+            type: String,
+            required: true,
+        },
         dotaId: {
             type: Number,
             unique: true,
@@ -15,19 +19,22 @@ const playerSchema = mongoose.Schema(
         playerClass: {
             enum: playerClass,
             type: String,
-            required: false,
+            required: true,
             default: 'player',
         },
         seasons: {
             type: [Number],
-            default: [0],
             required: true
         },
         positionPrefs: {
             type: [Number],
             default: [],
-            required: false,
+            required: true,
         },
+        tier: {
+            type: Number,
+            required: false,
+        }
     },
     {
         timestamps: true,

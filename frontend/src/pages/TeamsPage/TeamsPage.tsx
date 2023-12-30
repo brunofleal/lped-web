@@ -1,10 +1,10 @@
 import { Box, Grid, GridItem, Text } from '@chakra-ui/react';
-import { AxiosRequestConfig } from 'axios';
-import React, { useEffect, useState } from 'react';
+import { Method } from 'axios';
+import React from 'react';
 
 import endpoints from '../../constants/endpoints';
+import useFetch from '../../hooks/Fetch';
 import { TeamModel } from '../../models/TeamModel';
-import axiosApi from '../../shared/axiosApi';
 import TeamTable from './TeamTable';
 
 interface TeamsPageProps {
@@ -12,34 +12,19 @@ interface TeamsPageProps {
 }
 
 const TeamsPage = ({ previousSeason }: TeamsPageProps) => {
-    const [season, setSeason] = useState(0);
-    const [teams, setTeams] = useState<TeamModel[]>([]);
-    const getCurrentSeasonRequest: AxiosRequestConfig = {
-        url: endpoints.season.get.path,
-        method: endpoints.season.get.method,
-    };
-    const getTeamsRequest: AxiosRequestConfig = {
-        url: endpoints.team.list.path.replace(endpoints.team.list.queryParams.season, String(season)),
-        method: endpoints.team.list.method,
-    };
+    const { data: seasonData } =
+        useFetch<{ currentSeason: number; }>({ axiosConfig: { url: endpoints.season.get.path, method: 'GET' } });
+    const currentSeason = seasonData ? seasonData.currentSeason : 0;
 
-    useEffect(() => {
-        if (previousSeason === undefined) {
-            axiosApi.request(getCurrentSeasonRequest).then((response) => {
-                if (response.status === 200) {
-                    setSeason(response.data.currentSeason);
-                }
-            });
-        }
-    }, [previousSeason]);
+    const { data: teams, loading: loadingTeams } = useFetch<TeamModel[]>({
+        axiosConfig: {
+            url: endpoints.team.list.path.replace(endpoints.team.list.queryParams.season,
+                previousSeason !== undefined ? String(previousSeason) :
+                    String(currentSeason)),
+            method: endpoints.team.list.method as Method,
+        },
+    });
 
-    useEffect(() => {
-        axiosApi.request(getTeamsRequest).then((response) => {
-            if (response.status === 200) {
-                setTeams(response.data.results);
-            }
-        });
-    }, [season]);
 
     return <Box mt={4}>
         <Text
@@ -48,12 +33,15 @@ const TeamsPage = ({ previousSeason }: TeamsPageProps) => {
             fontSize='6xl'
             fontWeight='extrabold'
         >
-            {season !== undefined ? `Times Temporada ${season + 1}` : 'Times Temporada Atual'}
+            {previousSeason !== undefined ? `Times Temporada ${previousSeason + 1}` : 'Times Temporada Atual'}
         </Text>
-        <Grid templateColumns='repeat(3, 2fr)' alignContent={'center'} gap={6}>
+        <Grid
+            templateColumns='repeat(3, 2fr)'
+            alignContent={'center'} gap={6}
+            visibility={loadingTeams ? 'hidden' : 'visible'}>
             {
-                teams.map((team, index) => {
-                    return <GridItem key={'t' + index}>
+                (teams ?? []).map((team, index) => {
+                    return <GridItem key={Math.random() + index}>
                         <Box h={'auto'}>
                             <TeamTable team={team} styleIndex={index} />
                         </Box>

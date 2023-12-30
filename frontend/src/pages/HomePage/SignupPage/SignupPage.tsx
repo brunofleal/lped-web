@@ -1,47 +1,34 @@
-import { Box, Button, Divider, Icon, Skeleton, Text, useToast } from '@chakra-ui/react';
-import { AxiosRequestConfig } from 'axios';
-import React, { useEffect, useState } from 'react';
-import { BsSteam } from 'react-icons/bs';
+import { Box, Divider, Text, useToast } from '@chakra-ui/react';
+import { Method } from 'axios';
+import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { clearToken, registerToken, retrieveToken } from '../../../hooks/token';
+import { registerToken, retrieveToken } from '../../../hooks/token';
 
 const SteamID = require('steamid');
 
+import SteamLoginLogoutButton from '../../../components/SteamLoginLogout/SteamLoginLogoutButton';
 import endpoints from '../../../constants/endpoints';
-import { clearAvatar } from '../../../hooks/avatar';
+import useFetch from '../../../hooks/Fetch';
 import { StratzApi } from '../../../models/PlayerModel';
-import axiosApi, { BASE_URL } from '../../../shared/axiosApi';
 import LeagueSignupForm from './LeagueSignupForm/LeagueSignupForm';
 
 const SignupPage = () => {
     const toast = useToast();
     const [searchParams, setSearchParams] = useSearchParams();
-    const [steamId3, setSteamId3] = useState('');
-    const [stratzData, setStratzData] = useState<StratzApi>();
-    const handleSteamLogin = () => {
-        location.href = `${BASE_URL}${endpoints.steam.auth.path}`;
-    };
-    const handleLogout = () => {
-        setSteamId3('');
-        clearToken();
-        clearAvatar();
-    };
+    const steamId3 = retrieveToken();
 
-    const handleLoadStratzData = () => {
-        const getConfig: AxiosRequestConfig = {
+
+    const { data: stratzData, fetch: fetchStratzData } = useFetch<StratzApi>({
+        axiosConfig: {
             url: endpoints.stratz.get.path.replace(endpoints.stratz.get.pathParam.id, steamId3),
-            method: endpoints.stratz.get.method,
-        };
-        axiosApi.request(getConfig).then((response) => {
-            if (response.status === 200) {
-                setStratzData(response.data);
-                toast({ status: 'success', title: 'Dados da steam carregados!', position: 'top' });
-            }
-        }).catch(() => {
-            toast({ status: 'error', title: 'Erro no carregamento de dados da steam', position: 'top' });
-        });
-    };
+            method: endpoints.stratz.get.method as Method,
+        },
+        controlFetch: true,
+        onSuccess: () => toast({ status: 'success', title: 'Dados da steam carregados!', position: 'top' }),
+        onError: () => toast({ status: 'error', title: 'Erro no carregamento de dados da steam', position: 'top' }),
+    });
+
 
     useEffect(() => {
         if (searchParams.size > 0) {
@@ -53,7 +40,7 @@ const SignupPage = () => {
                 const sid = new SteamID(BigInt(steamId64));
                 const steamId3Full = sid.getSteam3RenderedID();
                 const steamId = steamId3Full.slice(steamId3Full.lastIndexOf(':') + 1, steamId3Full.length - 1);
-                setSteamId3(String(steamId));
+                registerToken(String(steamId));
                 setSearchParams([]);
             }
         }
@@ -61,34 +48,20 @@ const SignupPage = () => {
 
     useEffect(() => {
         if (steamId3) {
-            handleLoadStratzData();
-            registerToken(steamId3);
+            fetchStratzData();
         }
     }, [steamId3]);
 
-    useEffect(() => {
-        const token = retrieveToken();
-        if (token && token.length > 0) {
-            setSteamId3(token);
-        }
-    }, []);
 
     return <Box mt={8}>
-        {!steamId3.length ?
-            <Button onClick={handleSteamLogin} bgColor='#c7d5e0'>
-                <Text>Entre pela Steam</Text>
-                <Icon ml={2} as={BsSteam} />
-            </Button> :
-            <Button onClick={handleLogout} bgColor='#1b2838' color='white'>
-                <Text>Sair da Steam</Text>
-                <Icon ml={2} as={BsSteam} />
-            </Button>
-        }
+        <SteamLoginLogoutButton />
         <Divider my={2} />
-        {steamId3.length ?
+
+        {steamId3.length && stratzData ?
             <LeagueSignupForm stratzData={stratzData} /> :
-            <Skeleton h='800px' maxW='lg' borderWidth='1px' borderRadius='lg' p={2} />
+            <Text fontSize='xl'>Entre com a steam para verificar sua inscrição</Text>
         }
+
 
     </Box>;
 };

@@ -16,17 +16,18 @@ const getPlayers = catchAsync(async (req, res) => {
 });
 
 const getPlayer = catchAsync(async (req, res) => {
-    const user = await playerService.getPlayerById(req.params.id);
+    console.log(req.params);
+    const user = await playerService.getPlayerByDotaId(req.params.dotaId);
     res.send(user);
 });
 
 const updatePlayer = catchAsync(async (req, res) => {
-    const user = await playerService.updatePlayerById(req.params.userId, req.body);
+    const user = await playerService.updatePlayerByDotaId(req.params.dotaId, req.body);
     res.send(user);
 });
 
 const deletePlayer = catchAsync(async (req, res) => {
-    await playerService.deletePlayerById(req.params.userId);
+    await playerService.deletePlayerByDotaId(req.params.dotaId);
     res.status(httpStatus.NO_CONTENT).send();
 });
 

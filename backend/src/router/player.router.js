@@ -14,7 +14,7 @@ router
 router
     .route('/:dotaId')
     .get(playerController.getPlayer)
-    .patch(playerController.updatePlayer)
+    .put(playerController.updatePlayer)
     .delete(playerController.deletePlayer);
 
 module.exports = router;

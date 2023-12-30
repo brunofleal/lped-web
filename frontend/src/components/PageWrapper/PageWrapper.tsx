@@ -1,8 +1,9 @@
-import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, VStack } from '@chakra-ui/react';
+import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Image, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { FC } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
+import { retrieveAvatar } from '../../hooks/avatar';
 import routes from '../../shared/routes';
 
 const PageWrapper: FC = () => {
@@ -43,8 +44,9 @@ const PageWrapper: FC = () => {
                     </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbItem>
+                    {retrieveAvatar() ? <Image mr={2} h={'30px'} src={retrieveAvatar()} /> : <></>}
                     <BreadcrumbLink {...linkProps(routes.ManagementPage.path)} href={routes.ManagementPage.path}>
-                        Gerenciamento
+                        Meu Perfil
                     </BreadcrumbLink>
                 </BreadcrumbItem>
             </Breadcrumb>

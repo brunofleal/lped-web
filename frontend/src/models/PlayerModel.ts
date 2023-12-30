@@ -1,3 +1,5 @@
+import { PlayerType } from './Player/PlayerType';
+
 export interface StratzApi {
     identity: { name?: string; };
     steamAccount: {
@@ -11,11 +13,11 @@ export interface StratzApi {
 
 export interface PlayerModel {
     name: string;
-    dotaId: Number;
+    dotaId: number;
     stratzApi: StratzApi;
+    seasons?: number[];
     teamId?: string;
-    avatarUrl?: string;
     positionPrefs?: number[];
-    playerClass?: 'player' | 'captain' | 'standing';
+    playerClass?: PlayerType;
     tier?: number;
 }

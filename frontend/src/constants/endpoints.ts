@@ -7,9 +7,26 @@ const endpoints = {
             },
             method: 'POST',
         },
+        edit: {
+            path: '/api/player/:dotaId',
+            pathParam: {
+                dotaId: ':dotaId',
+            },
+            reqBodyParams: {
+                dotaId: 'dotaId',
+            },
+            method: 'PUT',
+        },
         list: {
             path: '/api/player?limit=100', // TODO: Keep limit at 100, for now
             method: 'GET',
+        },
+        getOne: {
+            path: '/api/player/:dotaId', // TODO: Keep limit at 100, for now
+            method: 'GET',
+            pathParam: {
+                dotaId: ':dotaId',
+            },
         },
     },
     team: {

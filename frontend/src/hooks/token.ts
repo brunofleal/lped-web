@@ -9,7 +9,7 @@ export const registerToken = (token: string) => {
 export const retrieveToken = () => {
     const base64Token = localStorage.getItem(TOKEN_KEY);
     const token = base64Token;
-    return token;
+    return token ?? '';
 };
 
 export const clearToken = () => {

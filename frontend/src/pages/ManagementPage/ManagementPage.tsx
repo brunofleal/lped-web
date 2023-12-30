@@ -1,11 +1,14 @@
-import { Box, Button, Divider, HStack, Input, Text, useToast } from '@chakra-ui/react';
+import { Box, Button, Divider, FormLabel, HStack, Icon, Input, Text, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { BsPencil } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 
+import PlayerCard from '../../components/PlayerCard/PlayerCard';
+import SteamLoginLogoutButton from '../../components/SteamLoginLogout/SteamLoginLogoutButton';
 import { clearToken, isAuthTokenValid, setToken } from '../../hooks/auth';
+import { retrieveToken } from '../../hooks/token';
 import routes from '../../shared/routes';
 import AddTeamModal from './AddTeamModal';
-import AddUserModal from './AddUserModal';
 
 const ManagementPage = () => {
     const navigate = useNavigate();
@@ -30,16 +33,35 @@ const ManagementPage = () => {
     }, [isAdmin]);
 
     return <Box mt={6}>
+        <HStack>
+            <SteamLoginLogoutButton />
+            {
+                retrieveToken() ?
+                    <Button
+                        colorScheme='blue'
+                        onClick={() => navigate(routes.SignupPage.path)}>
+                        Gerir Registro <Icon ml={2} as={BsPencil} />
+                    </Button> :
+                    <></>
+            }
+        </HStack>
+        <PlayerCard />
+        <Divider my={2} />
         {isAdmin ? <AdminManagementSection /> :
-            <HStack w='350px'>
+            <HStack w='500px' >
+                <FormLabel w='250px'>Acesso de Admin</FormLabel>
                 <Input
                     type='password'
-                    placeholder='token de acesso'
+                    placeholder='Senha de Admin'
                     mr={2}
                     value={tokenAttempt}
                     onChange={(event) => setTokenAttempt(event.target.value)}
                 />
-                <Button fontWeight={'bold'} fontSize={'2xl'} onClick={handleLogin}>Login</Button>
+                <Button variant='outline' colorScheme='blue'
+                    fontWeight={'bold'} fontSize={'2xl'} onClick={handleLogin}
+                >
+                    Login
+                </Button>
             </HStack>
         }
 
@@ -55,7 +77,6 @@ const AdminManagementSection = () => {
             fontWeight='extrabold'>
             Gerenciamento
         </Text>
-        <AddUserModal />
         <Divider m={2} />
         <AddTeamModal />
         <Button onClick={() => {
