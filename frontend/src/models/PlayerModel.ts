@@ -17,6 +17,5 @@ export interface PlayerModel {
     avatarUrl?: string;
     positionPrefs?: number[];
     playerClass?: 'player' | 'captain' | 'standing';
-    rankMedal?: number;
     tier?: number;
 }

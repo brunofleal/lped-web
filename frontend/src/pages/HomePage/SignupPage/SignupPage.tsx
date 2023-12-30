@@ -4,11 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { BsSteam } from 'react-icons/bs';
 import { useSearchParams } from 'react-router-dom';
 
-import { clearToken, registerToken, retrieveToken } from '../../../shared/token';
+import { clearToken, registerToken, retrieveToken } from '../../../hooks/token';
 
 const SteamID = require('steamid');
 
 import endpoints from '../../../constants/endpoints';
+import { clearAvatar } from '../../../hooks/avatar';
 import { StratzApi } from '../../../models/PlayerModel';
 import axiosApi, { BASE_URL } from '../../../shared/axiosApi';
 import LeagueSignupForm from './LeagueSignupForm/LeagueSignupForm';
@@ -22,9 +23,9 @@ const SignupPage = () => {
         location.href = `${BASE_URL}${endpoints.steam.auth.path}`;
     };
     const handleLogout = () => {
-        setSearchParams([]);
         setSteamId3('');
         clearToken();
+        clearAvatar();
     };
 
     const handleLoadStratzData = () => {
@@ -53,6 +54,7 @@ const SignupPage = () => {
                 const steamId3Full = sid.getSteam3RenderedID();
                 const steamId = steamId3Full.slice(steamId3Full.lastIndexOf(':') + 1, steamId3Full.length - 1);
                 setSteamId3(String(steamId));
+                setSearchParams([]);
             }
         }
     }, [searchParams]);

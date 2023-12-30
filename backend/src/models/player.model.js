@@ -13,7 +13,8 @@ const playerSchema = mongoose.Schema(
         stratzApi: {
         },
         playerClass: {
-            type: playerClass,
+            enum: playerClass,
+            type: String,
             required: false,
             default: 'player',
         },
