@@ -22,7 +22,7 @@ const HomePage = () => {
                 Inscrições Abertas para jogadores e standings para a temporada(2) 2024.1
                 Fase de grupos iniciando em jan/fev
             </Text>
-            <Button size='lg' variant='solid' bgColor='blue.400' onClick={() => navigate(routes.SignupPage.path)}>
+            <Button size='lg' variant='solid' colorScheme='blue' onClick={() => navigate(routes.SignupPage.path)}>
                 Se Inscreva
             </Button>
         </Box>

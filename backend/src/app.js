@@ -4,12 +4,10 @@ const xss = require('xss-clean');
 const mongoSanitize = require('express-mongo-sanitize');
 const compression = require('compression');
 const cors = require('cors');
-const httpStatus = require('http-status');
 const config = require('./config/config');
 const morgan = require('./config/morgan');
 const router = require('./router');
 const { errorConverter, errorHandler } = require('./middlewares/error');
-const ApiError = require('./utils/ApiError');
 const listEndpoints = require("express-list-endpoints");
 const bodyParser = require("body-parser");
 const path = require('path');
@@ -19,9 +17,11 @@ const app = express();
 const passport = require('passport');
 const SteamStrategy = require('passport-steam').Strategy;
 
+const BASE_URL = `http://localhost:${config.env == 'production' ? config.port : config.clientPort}`;
+
 passport.use(new SteamStrategy({
-    returnURL: 'http://localhost:3000/signup',
-    realm: 'http://localhost:3000/',
+    returnURL: `${BASE_URL}/signup`,
+    realm: BASE_URL,
     apiKey: config.steam.token
 },
     function (identifier, profile, done) {
