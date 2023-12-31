@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, Text } from '@chakra-ui/react';
+import { Box, Grid, GridItem, Text, useMediaQuery } from '@chakra-ui/react';
 import { Method } from 'axios';
 import React from 'react';
 
@@ -12,6 +12,11 @@ interface TeamsPageProps {
 }
 
 const TeamsPage = ({ previousSeason }: TeamsPageProps) => {
+    const [widthLargerThan1500] = useMediaQuery('(min-width: 1500px)');
+
+    const columnsInGrid = 1 + (widthLargerThan1500 ? 1 : 0);
+
+
     const { data: seasonData } =
         useFetch<{ currentSeason: number; }>({ axiosConfig: { url: endpoints.season.get.path, method: 'GET' } });
     const currentSeason = seasonData ? seasonData.currentSeason : 0;
@@ -36,12 +41,12 @@ const TeamsPage = ({ previousSeason }: TeamsPageProps) => {
             {previousSeason !== undefined ? `Times Temporada ${previousSeason + 1}` : 'Times Temporada Atual'}
         </Text>
         <Grid
-            templateColumns='repeat(3, 2fr)'
-            alignContent={'center'} gap={6}
+            templateColumns={`repeat(${columnsInGrid}, 1fr)`}
+            alignContent={'center'} gap={4}
             visibility={loadingTeams ? 'hidden' : 'visible'}>
             {
                 (teams ?? []).map((team, index) => {
-                    return <GridItem key={Math.random() + index}>
+                    return <GridItem h={'auto'} key={Math.random() + index}>
                         <Box h={'auto'}>
                             <TeamTable team={team} styleIndex={index} />
                         </Box>
@@ -49,7 +54,7 @@ const TeamsPage = ({ previousSeason }: TeamsPageProps) => {
                 })
             }
         </Grid>
-    </Box>;
+    </Box >;
 };
 
 export default TeamsPage;

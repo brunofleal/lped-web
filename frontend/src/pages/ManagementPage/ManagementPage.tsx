@@ -9,6 +9,7 @@ import { clearToken, isAuthTokenValid, setToken } from '../../hooks/auth';
 import { retrieveToken } from '../../hooks/token';
 import routes from '../../shared/routes';
 import AddTeamModal from './AddTeamModal';
+import LeagueHistoryLinks from './LeagueHistoryLinks/LeagueHistoryLinks';
 
 const ManagementPage = () => {
     const navigate = useNavigate();
@@ -64,6 +65,8 @@ const ManagementPage = () => {
                 </Button>
             </HStack>
         }
+        <Divider my={2} />
+        <LeagueHistoryLinks />
 
     </Box >;
 };

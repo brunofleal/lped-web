@@ -21,7 +21,6 @@ import {
     Tooltip,
     useToast,
 } from '@chakra-ui/react';
-import { Badge } from '@chakra-ui/react';
 import { AxiosRequestConfig, Method } from 'axios';
 import React, { useEffect, useState } from 'react';
 import { BsInfoCircleFill } from 'react-icons/bs';
@@ -29,6 +28,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Medal from '../../../../components/Medal/Medal';
 import RoleSelect from '../../../../components/RoleSelect/RoleSelect';
+import TierBadge from '../../../../components/TierBadge/TierBadge';
 import endpoints from '../../../../constants/endpoints';
 import { registerAvatar } from '../../../../hooks/avatar';
 import useFetch from '../../../../hooks/Fetch';
@@ -117,7 +117,7 @@ const LeagueSignupForm = ({ stratzData }: Props) => {
     const loadPlayerData = () => {
         if (stratzData && steamId3) {
             const dataFromStratz: PlayerModel = {
-                name: stratzData?.identity.name ?? '',
+                name: stratzData?.identity && stratzData?.identity.name ? stratzData?.identity.name : '',
                 dotaId: Number(steamId3),
                 stratzApi: stratzData,
             };
@@ -174,7 +174,7 @@ const LeagueSignupForm = ({ stratzData }: Props) => {
 
     const handleUpdatePlayerModel = () => {
         const updatedSeasons = playerModel?.seasons ?? [];
-        updatedSeasons.push(currentSeason);
+        if (!updatedSeasons.includes(currentSeason)) updatedSeasons.push(currentSeason);
         if (playerModel) {
             const updatedPlayerModel: PlayerModel = { ...playerModel, seasons: updatedSeasons };
             const customConfig: AxiosRequestConfig = {
@@ -243,9 +243,7 @@ const LeagueSignupForm = ({ stratzData }: Props) => {
                 </GridItem>
                 <GridItem colSpan={2}>
                     <FormLabel>Tier</FormLabel>
-                    <Badge borderRadius='lg' colorScheme='blue' variant='outline' fontSize='xl'>
-                        {playerModel?.tier}
-                    </Badge>
+                    <TierBadge tier={playerModel?.tier ? playerModel?.tier : 0} />
                 </GridItem>
                 <GridItem colSpan={2}>
                     <FormLabel>Função Primária</FormLabel>

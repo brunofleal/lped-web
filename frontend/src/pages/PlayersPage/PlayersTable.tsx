@@ -1,20 +1,26 @@
 import {
-    HStack, Icon, Image, Link as ChakraLink, Table,
-    TableContainer, Tbody, Td, Text, Th, Thead, Tr,
+    HStack, Icon,
+    Image, Link as ChakraLink,
+    Table, TableContainer, Tbody,
+    Td, Text, Th, Thead, Tr,
 } from '@chakra-ui/react';
 import { AxiosRequestConfig } from 'axios';
 import React, { useEffect, useState } from 'react';
 import { BiUserCircle } from 'react-icons/bi';
-import { BsFillPencilFill, BsSteam } from 'react-icons/bs';
+import { BsFillPencilFill } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 
-import dotaIcon from '../../assets/images/dota.png';
+import Medal from '../../components/Medal/Medal';
+import TierBadge from '../../components/TierBadge/TierBadge';
 import endpoints from '../../constants/endpoints';
 import { isAuthTokenValid } from '../../hooks/auth';
+import useFetch from '../../hooks/Fetch';
 import { getValidPlayerName } from '../../hooks/playerUtils';
 import { PlayerModel } from '../../models/PlayerModel';
-import axiosApi from '../../shared/axiosApi';
 import routes from '../../shared/routes';
+import DotaPosBadge from './components/DotaPosBadge';
+import PlayerLinks from './components/PlayerLinks';
+import SeasonFunction from './components/SeasonFunction';
 
 
 interface PlayerTableProps {
@@ -22,44 +28,49 @@ interface PlayerTableProps {
     playerIds?: Number[];
     captainDotaId?: Number;
     tableColor?: string;
+    useMaxWidth?: boolean;
 }
-const PlayersTable = ({ players, playerIds, captainDotaId, tableColor }: PlayerTableProps) => {
+const PlayersTable = ({ players, playerIds, captainDotaId, tableColor, useMaxWidth }: PlayerTableProps) => {
     const [playersInfo, setPlayerInfo] = useState<PlayerModel[]>([]);
 
-    const playersWithDetails = playersInfo?.map((player, index) => {
-        return <PlayerRow playerInfo={player} isCaptain={player.dotaId === captainDotaId} key={'k' + index} />;
-    });
+    const playersWithDetails = playersInfo ? playersInfo.map((player, index) => {
+        return <PlayerRow
+            playerInfo={player} isCaptain={player.dotaId === captainDotaId}
+            key={Math.random() + index}
+        />;
+    }) : [];
 
+    const queryParam = playerIds && !players ? `&dotaId=${playerIds.join('&dotaId=')}` : '';
+    const listFilteredPlayersConfig: AxiosRequestConfig = {
+        url: `${endpoints.player.list.path}${queryParam}`,
+        method: endpoints.player.list.method,
+    };
+    const { data: playersFetched } = useFetch<PlayerModel[]>({
+        axiosConfig: listFilteredPlayersConfig,
+        onError: () => {
+        },
+    });
     useEffect(() => {
         if (players) {
             setPlayerInfo(players);
+        } else if (playersFetched) {
+            setPlayerInfo(playersFetched);
         }
-    }, [players]);
+    }, [players, playerIds, playersFetched]);
 
-    useEffect(() => {
-        if (playerIds) {
-            const queryParam = `?dotaId=${playerIds.join('&dotaId=')}`;
-            const listFilteredPlayersConfig: AxiosRequestConfig = {
-                url: `/api/player${queryParam}`,
-                method: endpoints.player.list.method,
-            };
-
-            axiosApi.request(listFilteredPlayersConfig).then((response) => {
-                if (response.status === 200) {
-                    setPlayerInfo(response.data.results as PlayerModel[]);
-                }
-            });
-        }
-    }, [playerIds]);
-
-    return <TableContainer w={'inherit'} h={'inherit'} overflowY="auto">
+    return <TableContainer maxWidth={useMaxWidth ? 'auto' : '750px'} h={'inherit'} overflowY="auto">
         <Table variant='striped' colorScheme={tableColor}>
             <Thead position={'sticky'}>
                 <Tr>
                     <Th>
                         <Icon as={BiUserCircle} width={'32px'} height={'32px'} />
                     </Th>
+                    <Th>Dota Id</Th>
                     <Th>Nome</Th>
+                    <Th>Posições</Th>
+                    <Th>Medalha</Th>
+                    <Th>Tier</Th>
+                    <Th>Categoria</Th>
                     <Th>Links</Th>
                     {isAuthTokenValid() ? <Th>Edit</Th> : <></>}
                 </Tr>
@@ -78,16 +89,40 @@ interface PlayerProps {
 const PlayerRow = ({ playerInfo, isCaptain }: PlayerProps) => {
     return <Tr>
         <Td>
-            <Image h={'50px'} w={'50px'}
+            <Image
+                h='50px'
+                objectFit='contain'
+                borderRadius={'lg'}
                 src={playerInfo.stratzApi.steamAccount.avatar}
                 fallback={<Icon as={BiUserCircle} />}
                 loading="lazy"
             />
         </Td>
         <Td>
+            <ChakraLink href={`https://stratz.com/players/${String(playerInfo?.dotaId)}`} isExternal={true}>
+                {playerInfo.dotaId}
+            </ChakraLink>
+        </Td>
+        <Td>
             <Text fontWeight={isCaptain ? 'bold' : 'normal'}>{isCaptain ? '[C]' : <></>}
                 {getValidPlayerName(playerInfo)}
             </Text>
+        </Td>
+        <Td>
+            <HStack>
+                <DotaPosBadge isPrimary={true} roleId={playerInfo.positionPrefs ? playerInfo.positionPrefs[0] : 0} />
+                <DotaPosBadge roleId={playerInfo.positionPrefs ? playerInfo.positionPrefs[1] : 0} />
+            </HStack>
+        </Td>
+        <Td>
+            <Medal fullRank={playerInfo.stratzApi.steamAccount.seasonRank ?
+                Number(playerInfo.stratzApi.steamAccount.seasonRank) : 0} />
+        </Td>
+        <Td>
+            <TierBadge tier={playerInfo?.tier ? playerInfo?.tier : 0} />
+        </Td>
+        <Td>
+            <SeasonFunction type={playerInfo.playerClass ? playerInfo.playerClass : undefined} />
         </Td>
         <Td>
             <PlayerLinks player={playerInfo} />
@@ -104,28 +139,6 @@ const PlayerRow = ({ playerInfo, isCaptain }: PlayerProps) => {
         </Td> : <></>}
 
     </Tr>;
-};
-
-const PlayerLinks = ({ player }: { player: PlayerModel; }) => {
-    return <HStack>
-        <ChakraLink
-            href={`https://stratz.com/players/${String(player?.dotaId)}`}
-            isExternal={true}
-        >
-            <Image w={25} h={25}
-                src={dotaIcon}
-                borderRadius={'25%'}
-                fallback={<Icon as={BiUserCircle} />}
-                loading="lazy"
-            />
-        </ChakraLink>;
-        <ChakraLink
-            href={player.stratzApi.steamAccount.profileUri?.replace('htpps', 'http')}
-            isExternal={true}
-        >
-            <Icon as={BsSteam} w={25} h={25} borderRadius={'25%'} />
-        </ChakraLink>
-    </HStack>;
 };
 
 export default PlayersTable;

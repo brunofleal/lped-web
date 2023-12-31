@@ -12,8 +12,9 @@ interface RoleProps {
 const RoleSelect = ({ roleId, onRoleChange, disabled }: RoleProps) => {
     const color = roleId > 0 ? Roles.filter((role) => role.id === roleId)[0].color : 'white';
     return <Select
-        color={roleId > 0 ? 'white' : 'black'}
+        color={'black'}
         bgColor={color}
+        fontWeight='bold'
         disabled={disabled}
         placeholder='Selecione uma função'
         value={roleId} onChange={(event) => {
@@ -25,12 +26,13 @@ const RoleSelect = ({ roleId, onRoleChange, disabled }: RoleProps) => {
             Roles.map((roleOpt: Role) => {
                 return <option
                     key={roleOpt.id + Math.random()}
-                    value={roleOpt.id}>
+                    value={roleOpt.id}
+                >
                     {roleOpt.name}
                 </option>;
             })
         }
-    </Select>;
+    </Select >;
 };
 
 export default RoleSelect;
