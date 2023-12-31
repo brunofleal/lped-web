@@ -1,13 +1,18 @@
 -version: "3.8"
 services:
-  reactClient:
+  react_client:
+    container_name: react_client
     build:
       context: ./frontend
-  nodeServer:
+  node_server:
+    container_name: node_server
     build:
       context: ./backend
     ports:
       - "8000:8000"
+    volumes:
+      - ./backend:/backend
+      - ./backend/node_modules
   nginx:
     restart: always
     build:
