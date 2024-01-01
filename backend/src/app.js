@@ -17,7 +17,9 @@ const app = express();
 const passport = require('passport');
 const SteamStrategy = require('passport-steam').Strategy;
 
-const BASE_URL = `http://localhost:${config.env == 'production' ? config.port : config.clientPort}`;
+const BASE_URL = config.prodUrl ? config.prodUrl : `http://localhost:${config.env == 'production' ? config.port : config.clientPort}`;
+console.log({ BASE_URL });
+console.log({ config });
 
 passport.use(new SteamStrategy({
     returnURL: `${BASE_URL}/signup`,

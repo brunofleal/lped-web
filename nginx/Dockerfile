@@ -1,2 +1,6 @@
-FROM nginx:alpine
-COPY default.conf /etc/nginx/conf.d/default.conf
+FROM nginx:latest
+LABEL Author="Bruno Leal"
+COPY nginx.conf nginx.conf
+EXPOSE 80
+
+CMD [ "-g", "daemon off;" ]

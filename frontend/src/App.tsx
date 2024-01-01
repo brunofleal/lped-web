@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 
 import favicon from './assets/favicon/favicon-16x16.png';
+import MadeByLinks from './components/MadeByLinks/MadeByLinks';
 import router from './shared/router';
 
 
@@ -22,6 +23,7 @@ const App: FC = () => {
             <ChakraBaseProvider theme={chakraTheme}>
                 <RouterProvider router={router} />
             </ChakraBaseProvider>
+            <MadeByLinks />
         </>
     );
 };

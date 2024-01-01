@@ -47,7 +47,6 @@
         "eject": "react-scripts eject",
         "prettier": "prettier . --ignore-path .gitignore",
         "format:check": "prettier . --ignore-path .gitignore --check",
-        "format:fix": "prettier . --ignore-path .gitignore --write",
         "lint": "eslint --ext .tsx,.ts .",
         "lint:fix": "yarn lint -- --fix",
         "validate": "concurrently \"yarn run lint\" \"yarn run type:check\" \"yarn run format:check\"",

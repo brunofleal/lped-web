@@ -9,6 +9,7 @@ const envVarsSchema = Joi.object()
         NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
         PORT: Joi.number().default(8000),
         CLIENT_PORT: Joi.number().default(3000),
+        PROD_URL: Joi.string(),
         MONGODB_URL: Joi.string().required().description('Mongo DB url'),
         STRATZ_API_TOKEN: Joi.string().required().description('Stratz api token'),
         ADMIN_AUTH_TOKEN: Joi.string().required().description('admin pass'),
@@ -26,6 +27,7 @@ module.exports = {
     env: envVars.NODE_ENV,
     port: envVars.PORT,
     clientPort: envVars.CLIENT_PORT,
+    prodUrl: envVars.PROD_URL,
     mongoose: {
         url: envVars.MONGODB_URL + (envVars.NODE_ENV === 'test' ? '-test' : ''),
         options: {
