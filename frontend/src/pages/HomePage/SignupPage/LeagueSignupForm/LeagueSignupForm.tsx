@@ -36,6 +36,7 @@ import { retrieveToken } from '../../../../hooks/token';
 import { PlayerType } from '../../../../models/Player/PlayerType';
 import { getTierFromPlayerModel } from '../../../../models/Player/Tier';
 import { PlayerModel, StratzApi } from '../../../../models/PlayerModel';
+import { RULES_LINK } from '../../../../shared/links';
 import RegisterStatus from './RegisterStatus';
 import { ConfirmProps, getHelperText, isConfirmEnabled } from './utils';
 
@@ -49,7 +50,6 @@ interface Props {
 const LeagueSignupForm = ({ stratzData }: Props) => {
     const navigate = useNavigate();
     const toast = useToast();
-    const rulesLink = 'https://pastebin.com/ky1ZpqiZ';
     const [playerModel, setPlayerModel] = useState<PlayerModel>();
     const [primaryRole, setPrimaryRole] = useState(0);
     const [secondaryRole, setSecondaryRole] = useState(0);
@@ -261,7 +261,7 @@ const LeagueSignupForm = ({ stratzData }: Props) => {
                     checked={checked}
                     onChange={(event) => setChecked(event.target.checked)}
                 />
-                <Text fontSize={'xl'}>Li e concordo com as <Link color='blue' href={rulesLink} isExternal>
+                <Text fontSize={'xl'}>Li e concordo com as <Link color='blue' href={RULES_LINK} isExternal>
                     regras
                 </Link> e desejo participar da {currentSeason + 1}ª temporada da liga Mipe Alegre</Text>
             </HStack>

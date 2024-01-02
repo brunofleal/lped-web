@@ -23,7 +23,6 @@ const updateTeamById = async (id, updateBody) => {
     }
     Object.assign(team, updateBody);
     await team.save();
-    console.log('saved team', updateBody);
     return team;
 };
 

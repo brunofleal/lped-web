@@ -18,8 +18,6 @@ const passport = require('passport');
 const SteamStrategy = require('passport-steam').Strategy;
 
 const BASE_URL = config.prodUrl ? config.prodUrl : `http://localhost:${config.env == 'production' ? config.port : config.clientPort}`;
-console.log({ BASE_URL });
-console.log({ config });
 
 passport.use(new SteamStrategy({
     returnURL: `${BASE_URL}/signup`,
@@ -89,12 +87,5 @@ app.use(express.static(path.resolve(__dirname, '../../frontend/build'))); // Ser
 app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../../frontend/build', 'index.html'));
 });
-
-/*
-// send back a 404 error for any unknown api request
-app.use((req, res, next) => {
-    next(new ApiError(httpStatus.NOT_FOUND, 'Not found' + req.baseUrl));
-});
- */
 
 module.exports = app;

@@ -12,6 +12,7 @@ import endpoints from '../../../constants/endpoints';
 import useFetch from '../../../hooks/Fetch';
 import { StratzApi } from '../../../models/PlayerModel';
 import LeagueSignupForm from './LeagueSignupForm/LeagueSignupForm';
+import PostSignupDiv from './PostSignupAlert/PostSignupDiv';
 
 const SignupPage = () => {
     const toast = useToast();
@@ -61,8 +62,7 @@ const SignupPage = () => {
             <LeagueSignupForm stratzData={stratzData} /> :
             <Text fontSize='xl'>Entre com a steam para verificar sua inscrição</Text>
         }
-
-
+        <PostSignupDiv />
     </Box>;
 };
 

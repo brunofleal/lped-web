@@ -16,7 +16,6 @@ const getPlayers = catchAsync(async (req, res) => {
 });
 
 const getPlayer = catchAsync(async (req, res) => {
-    console.log(req.params);
     const user = await playerService.getPlayerByDotaId(req.params.dotaId);
     res.send(user);
 });
