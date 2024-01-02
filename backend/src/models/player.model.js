@@ -31,6 +31,12 @@ const playerSchema = mongoose.Schema(
             default: [],
             required: true,
         },
+        selfDescription: {
+            type: String,
+            required: false,
+            maxLength: 200,
+            default: ''
+        },
         tier: {
             type: Number,
             required: false,

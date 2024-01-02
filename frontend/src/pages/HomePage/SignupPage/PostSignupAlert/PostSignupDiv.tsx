@@ -1,22 +1,27 @@
-import { Box, Link, Text } from '@chakra-ui/react';
+import { Button, Divider, HStack, Icon, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
+import { BsWhatsapp } from 'react-icons/bs';
 
 import { PAYMENT_PHONE, WHATSAPP_GROUP } from '../../../../shared/links';
 
 const PostSignupDiv = () => {
     const WPP_PHONE_LINK = `https://wa.me/${PAYMENT_PHONE}`;
-    return <Box>
-        <Text fontSize='xl'>
-            Entre no Grupo de
-            <Link color='green' href={WHATSAPP_GROUP} isExternal={true}> Whatsapp </Link>
-            da Liga para se manter informado
-        </Text>
-        <Text fontSize='xl' flexDir='row'>
-            Fale com o organizador através do número
-            <Link color='green' href={WPP_PHONE_LINK} isExternal={true}> {PAYMENT_PHONE} </Link>
-            para pagamento da taxa de inscrição(R$10) revertida na premiação
-        </Text>d
-    </Box>;
+    return <VStack align='start'>
+        <Divider my={2} />
+        <Button rightIcon={<Icon as={BsWhatsapp} />}
+            colorScheme='whatsapp'
+            onClick={() => window.open(WHATSAPP_GROUP, 'blank')}>
+            Entre no Grupo de Whatsapp
+        </Button>
+        <HStack>
+            <Text>Pague a taxa(R$10)</Text>
+            <Button rightIcon={<Icon as={BsWhatsapp} />}
+                colorScheme='whatsapp'
+                onClick={() => window.open(WPP_PHONE_LINK, 'blank')}>
+                Fale com o Organizador
+            </Button>
+        </HStack>
+    </VStack >;
 };
 
 

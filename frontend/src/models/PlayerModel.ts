@@ -17,6 +17,7 @@ export interface PlayerModel {
     stratzApi: StratzApi;
     seasons?: number[];
     teamId?: string;
+    selfDescription?: string;
     positionPrefs?: number[];
     playerClass?: PlayerType;
     tier?: number;

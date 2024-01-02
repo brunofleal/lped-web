@@ -48,6 +48,8 @@ const ManagementPage = () => {
         </HStack>
         <PlayerCard />
         <Divider my={2} />
+        <LeagueHistoryLinks />
+        <Divider my={2} />
         {isAdmin ? <AdminManagementSection /> :
             <HStack w='500px' >
                 <FormLabel w='250px'>Acesso de Admin</FormLabel>
@@ -65,9 +67,6 @@ const ManagementPage = () => {
                 </Button>
             </HStack>
         }
-        <Divider my={2} />
-        <LeagueHistoryLinks />
-
     </Box >;
 };
 

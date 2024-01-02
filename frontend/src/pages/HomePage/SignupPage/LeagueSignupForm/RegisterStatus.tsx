@@ -1,4 +1,4 @@
-import { HStack, Icon, Skeleton, Text } from '@chakra-ui/react';
+import { HStack, Icon, Text } from '@chakra-ui/react';
 import React from 'react';
 import { BsCheck2Circle, BsXCircle } from 'react-icons/bs';
 
@@ -22,7 +22,7 @@ const RegisterStatus = ({ isRegisteredInSeason }: Props) => {
         </HStack>;
     }
 
-    return <Skeleton w='200px' h='40px' />;
+    return <></>;
 };
 
 export default RegisterStatus;

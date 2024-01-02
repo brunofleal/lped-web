@@ -18,6 +18,7 @@ import {
     RadioGroup,
     Stack,
     Text,
+    Textarea,
     Tooltip,
     useToast,
 } from '@chakra-ui/react';
@@ -237,13 +238,27 @@ const LeagueSignupForm = ({ stratzData }: Props) => {
                         </Stack>
                     </RadioGroup>
                 </GridItem>
-                <GridItem colSpan={2}>
+                <GridItem colSpan={1}>
                     <FormLabel>Medalha</FormLabel>
                     <Medal fullRank={Number(playerModel?.stratzApi?.steamAccount.seasonRank)} />
                 </GridItem>
-                <GridItem colSpan={2}>
+                <GridItem colSpan={1}>
                     <FormLabel>Tier</FormLabel>
                     <TierBadge tier={playerModel?.tier ? playerModel?.tier : 0} />
+                </GridItem>
+                <GridItem colSpan={2}>
+                    <FormLabel>Descrição</FormLabel>
+                    <Textarea
+                        placeholder='Fale um pouco sobre seu dota'
+                        value={String(playerModel?.selfDescription)}
+                        onChange={(event) => {
+                            const updatedPlayer = { ...playerModel };
+                            if (updatedPlayer) {
+                                updatedPlayer.selfDescription = event.target.value.slice(0, 150);
+                                setPlayerModel(updatedPlayer as PlayerModel);
+                            }
+                        }}
+                    />
                 </GridItem>
                 <GridItem colSpan={2}>
                     <FormLabel>Função Primária</FormLabel>
