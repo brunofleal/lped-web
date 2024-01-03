@@ -46,9 +46,12 @@ const ManagementPage = () => {
                     <></>
             }
         </HStack>
-        <PlayerCard />
-        <Divider my={2} />
-        <LeagueHistoryLinks />
+        <HStack gap={2} align={'start'}>
+            <PlayerCard />
+            <Divider orientation='vertical' />
+            <LeagueHistoryLinks />
+        </HStack>
+
         <Divider my={2} />
         {isAdmin ? <AdminManagementSection /> :
             <HStack w='500px' >

@@ -72,7 +72,11 @@ const PlayersTable = ({ players, playerIds, captainDotaId, tableColor, useMaxWid
                     <Th>Tier</Th>
                     <Th>Categoria</Th>
                     <Th>Links</Th>
-                    {isAuthTokenValid() ? <Th>Edit</Th> : <></>}
+                    {isAuthTokenValid() ?
+                        <>
+                            <Th>Whatsapp</Th>
+                            <Th>Edit</Th>
+                        </> : <></>}
                 </Tr>
             </Thead>
             <Tbody>
@@ -127,16 +131,21 @@ const PlayerRow = ({ playerInfo, isCaptain }: PlayerProps) => {
         <Td>
             <PlayerLinks player={playerInfo} />
         </Td>
-        {isAuthTokenValid() ? <Td>
-            <Link
-                to={
-                    routes.EditPlayerPage.path.replace(routes.EditPlayerPage.pathParam.id,
-                        String(playerInfo.dotaId))
-                }
-            >
-                <BsFillPencilFill />
-            </Link>
-        </Td> : <></>}
+        {isAuthTokenValid() ? <>
+            <Td>
+                <Text>{playerInfo.contactPhone}</Text>
+            </Td>
+            <Td>
+                <Link
+                    to={
+                        routes.EditPlayerPage.path.replace(routes.EditPlayerPage.pathParam.id,
+                            String(playerInfo.dotaId))
+                    }
+                >
+                    <BsFillPencilFill />
+                </Link>
+            </Td>
+        </> : <></>}
 
     </Tr>;
 };

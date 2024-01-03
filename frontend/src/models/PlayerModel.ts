@@ -20,5 +20,6 @@ export interface PlayerModel {
     selfDescription?: string;
     positionPrefs?: number[];
     playerClass?: PlayerType;
+    contactPhone?: string;
     tier?: number;
 }

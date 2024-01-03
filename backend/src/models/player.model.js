@@ -8,6 +8,7 @@ const playerSchema = mongoose.Schema(
         name: {
             type: String,
             required: true,
+            maxLength: 40,
         },
         dotaId: {
             type: Number,
@@ -36,6 +37,11 @@ const playerSchema = mongoose.Schema(
             required: false,
             maxLength: 200,
             default: ''
+        },
+        contactPhone: {
+            type: String,
+            required: false,
+            maxLength: 20,
         },
         tier: {
             type: Number,

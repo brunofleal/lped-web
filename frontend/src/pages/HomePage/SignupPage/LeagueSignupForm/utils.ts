@@ -8,14 +8,15 @@ export const getConfirmFlags = ({ playerModel, primaryRole, secondaryRole, check
     const playerType = !!playerModel?.playerClass;
     const rolesSet = primaryRole > 0 && secondaryRole > 0;
     const rolesDifferent = primaryRole !== secondaryRole;
+    const contactSet = !!playerModel?.contactPhone;
     return {
-        nameSet, playerType, checked, rolesSet, rolesDifferent,
+        nameSet, playerType, checked, rolesSet, rolesDifferent, contactSet,
     };
 };
 
 export const getHelperText = (props: ConfirmProps) => {
     const {
-        checked, nameSet, playerType, rolesSet, rolesDifferent,
+        checked, nameSet, playerType, rolesSet, rolesDifferent, contactSet,
     } = getConfirmFlags(props);
     if (!nameSet) {
         return 'Preencha o campo Nickname';
@@ -32,10 +33,13 @@ export const getHelperText = (props: ConfirmProps) => {
     if (!checked) {
         return 'Leia as regras e confirme marcando a caixa';
     }
+    if (!contactSet) {
+        return 'Preencha o campo Whatsapp';
+    }
 };
 
 export const isConfirmEnabled = (props: ConfirmProps) => {
-    const { checked, rolesSet, rolesDifferent, playerType } = getConfirmFlags(props);
-    return checked && rolesSet && rolesDifferent && playerType;
+    const { checked, rolesSet, rolesDifferent, playerType, contactSet } = getConfirmFlags(props);
+    return checked && rolesSet && rolesDifferent && playerType && contactSet;
 };
 

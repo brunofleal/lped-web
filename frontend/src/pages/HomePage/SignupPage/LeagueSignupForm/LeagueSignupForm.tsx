@@ -190,7 +190,7 @@ const LeagueSignupForm = ({ stratzData }: Props) => {
     const playerExistsInDb = !!savedPlayerModel;
     const playerRegisteredInSeason = playerExistsInDb && savedPlayerModel.seasons?.includes(currentSeason);
 
-    return <Box width='lg' borderWidth='1px' borderRadius='lg' p={2}>
+    return <Box minW='600px' w='50%' borderWidth='1px' borderRadius='lg' p={2}>
         <FormControl>
             <RegisterStatus isRegisteredInSeason={!!playerRegisteredInSeason} />
             <Grid templateColumns='repeat(4, 2fr)' gap={3}>
@@ -217,7 +217,7 @@ const LeagueSignupForm = ({ stratzData }: Props) => {
                     <FormLabel>Id do Dota</FormLabel>
                     <Input variant='filled' type='number' value={steamId3 ?? 0} disabled />
                 </GridItem>
-                <GridItem colSpan={4}>
+                <GridItem colSpan={2}>
                     <FormLabel>Participação no Campeonato
                         <Tooltip label={participationTooltip} placement='right' hasArrow={true}>
                             <span><Icon ml={1} as={BsInfoCircleFill} /></span>
@@ -237,6 +237,17 @@ const LeagueSignupForm = ({ stratzData }: Props) => {
                                 })}
                         </Stack>
                     </RadioGroup>
+                </GridItem>
+                <GridItem colSpan={2}>
+                    <FormLabel>Whatsapp</FormLabel>
+                    <Input type='text' value={playerModel?.contactPhone} placeholder='+55 (81) 99999-9999'
+                        onChange={(event) => {
+                            const updatedPlayer = { ...playerModel };
+                            if (updatedPlayer) {
+                                updatedPlayer.contactPhone = event.target.value.replace(/[a-zA-Z]/, '').slice(0, 25);
+                                setPlayerModel(updatedPlayer as PlayerModel);
+                            }
+                        }} />
                 </GridItem>
                 <GridItem colSpan={1}>
                     <FormLabel>Medalha</FormLabel>

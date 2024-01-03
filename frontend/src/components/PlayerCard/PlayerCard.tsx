@@ -40,7 +40,7 @@ const PlayerCard = () => {
     const currentSeason = seasonData ? seasonData.currentSeason : 0;
     const playerExistsInDb = !!savedPlayerModel;
     const playerRegisteredInSeason = playerExistsInDb && savedPlayerModel.seasons?.includes(currentSeason);
-    return <Box w={'xl'}
+    return <Box minW='600px' w='50%'
         mt={1}
         bgGradient={gradientStyle}
         boxShadow='xl'
@@ -80,15 +80,21 @@ const PlayerCard = () => {
                         </Stack>
                     </RadioGroup>
                 </GridItem>
-                <GridItem colSpan={2}>
+                <GridItem colSpan={1}>
                     <FormLabel>Medalha</FormLabel>
                     <Medal fullRank={Number(savedPlayerModel?.stratzApi?.steamAccount.seasonRank)} />
                 </GridItem>
-                <GridItem colSpan={2}>
+                <GridItem colSpan={1}>
                     <FormLabel>Tier</FormLabel>
                     <Badge borderRadius='lg' colorScheme='blue' variant='outline' fontSize='xl'>
                         {savedPlayerModel?.tier}
                     </Badge>
+                </GridItem>
+                <GridItem colSpan={2}>
+                    <FormLabel>Descrição</FormLabel>
+                    <Text borderRadius={'md'} border='solid 1px red' borderColor='gray.200' p={1}>
+                        {String(savedPlayerModel?.selfDescription)}
+                    </Text>
                 </GridItem>
                 <GridItem colSpan={2}>
                     <FormLabel>Função Primária</FormLabel>
